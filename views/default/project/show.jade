@@ -1,0 +1,46 @@
+div
+  div.row
+    div.col-md-12
+      div.row
+        div.col-xs-6
+          h2 {{ project.name }}
+          div(ng-include="'views/default/project/includes/invite_modal'")
+          div(ng-include="'views/default/project/includes/delete_modal'")
+        div.col-xs-6
+          div.btn-toolbar.project-toolbar
+            div.pull-right(ng-if="viewType != 'Quality' && viewType != 'Agile View' && viewType != 'RACI' && viewType != 'Risks'")
+              label
+                | Export as:
+              div.btn-group.right
+                a(ng-click="exportToPDF()", class="btn btn-default btn-icon no-text pdf")
+                a(id="export-pdf", class="hidden")
+                a(ng-click="exportToSimpleCSV()", class="btn btn-default btn-icon no-text csv")
+                a(id="export-csv", class="hidden")
+                a(ng-click="exportToSimpleXML()", class="btn btn-default btn-icon no-text xml")
+                a(id="export-xml", class="hidden")
+            div.pull-right(ng-if="viewType == 'RACI'")
+              label
+                | Export as:
+              div.btn-group.right
+                a(ng-click="exportToRaciCSV()", class="btn btn-default btn-icon no-text csv raci")
+                a(id="export-raci", class="hidden")
+            div.pull-right(ng-if="viewType == 'Risks'")
+              label
+                | Export as:
+              div.btn-group.right
+                a(ng-click="exportToRiskCSV()", class="btn btn-default btn-icon no-text csv risk-csv")
+                a(id="export-risk-csv", class="hidden")
+  div.ui-container
+    div.col-xs-12.app-panel(style="margin-left: 0px;")
+      ui-view
+    span(class="ui-menu-open", id="openUiMenu", ng-click="openMenuBar()")
+      i(class="icon-menu", ng-click="openMenuBar()")
+    //- refactor view change click 
+    div.ui-menu-panel 
+      i(class="fa fa-times ui-menu-close ", id="closeUiMenu", ng-click="closeMenuBar()")
+      .row.view-icon-row(class="view-icon-container {{view.icon+'_cont'}}",ng-repeat="view in views", ng-click="changeView( view.name )")
+        a(href="{{view.href}}", class="ui-menu-buttom")
+          div(class="col-xs-12 ")
+            i(class="{{view.icon}} ui-item pull-right")
+          //- br(ng-click="changeView( view.name )")
+          span.view-label() {{view.tooltip}}

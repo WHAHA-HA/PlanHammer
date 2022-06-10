@@ -1,0 +1,39 @@
+{
+  "port": "3000",
+  "domain": "planhammer.io",
+  "db": "mongodb://prod_app_master:3*1PN3I5K70Y'$f@ds033071-a0.mongolab.com:33071,ds033071-a1.mongolab.com:33071/planhammer_prod",
+  "cookie_secret": "tas4skh@amm3r",
+  "google": {
+    "clientID": "957065445007-46ak8t91c9ihv6ae40t23fdt8bjoie3f.apps.googleusercontent.com",
+    "clientSecret": "J9RMX2Vm7NbDAXgB7ppB8IJr",
+    "callbackURL": "http://planhammer.io/auth/google/callback",
+    "passReqToCallback": true
+  },
+  "mail": {
+    "type": "mandrill",
+    "auth": {
+      "apikey": "L48WEPeoVJiqek2AF6lzUg"
+    },
+    "options": {
+      "service": "PlanHammer"
+    },
+    "from": {
+      "name": "PlanHammer",
+      "email": "support@planhammer.io"
+    }
+  },
+  "payment": {
+    "type": "stripe",
+    "options": {
+      "api_key": "sk_live_2wSxVKCsirI9sDiueP3dKjE3"
+    }
+  },
+  "analytics": {
+    "accountId": "UA-10969633-7",
+    "domain": "planhammer.io"
+  },
+  "aws": {
+    "id": "AKIAJYKRKNTJNYN6PAXQ",
+    "key": "6CdJ3x7+ZdFPALiQY5lCFDV+0SNE/Q35cYSra2ZB"
+  }
+}

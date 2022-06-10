@@ -1,0 +1,10 @@
+html
+  head
+    meta(charset='utf8')
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+  body
+    h1 Hello from #{inviter.username}
+      if inviter.name && inviter.name.first && inviter.name.last
+        | (#{inviter.name.first} #{inviter.name.last})
+    p #{message}
+    p Create a free account just by<a href="http://#{domain}/#/signup/#{inviter._id}">clicking this link</a>.

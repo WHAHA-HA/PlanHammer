@@ -1,0 +1,30 @@
+div.container
+  div.row
+    div.col-md-12
+      div(ui-view="nodeForm")
+      div(ng-include="'views/default/project/includes/risk_modal'")
+
+      div
+        div(ng-if="!riskList || riskList.length===0", class="well well-lg") Create your first Risk here, or in the attribute view of any task.
+        div.new-risk
+          button.btn.btn-primary(ng-click="newRiskModal()") + New Risk
+
+        div(ng-if="riskList && riskList.length > 0", id="riskTable").contacts.risks.table.table-hover
+          div.thead
+            div.tr
+              div.th Name
+              div.th Topic
+              div.th Probability
+              div.th Impact
+              div.th Score
+              div.th Associated Task
+              div.clearfix
+          div.tbody
+            div(class="tr", ng-repeat="risk in riskList | orderBy:score", ng-click="showRiskModal(risk)")
+              div.td {{ risk.name }}
+              div.td {{ risk.topic }}
+              div.td {{ risk.probability }}
+              div.td {{ risk.impact }}
+              div.td {{ risk.score }}
+              div.td {{ risk.task.title }}
+              div.clearfix

@@ -1,0 +1,92 @@
+
+
+//- script(src="https://checkout.stripe.com/v2/checkout.js", class="stripe-button", data-key="pk_test_GMxTC4t4hCJceXXmNj5gQ0SE", data-amount="200", data-name="Demo Site", data-description="2 widgets ($20.00)", data-image="/128x128.png")
+
+
+
+//- script(type="text/javascript", src="https://js.stripe.com/v2/")
+
+//- form(action="", method="POST")
+  .form-row
+    .cc-text Card Number
+    input(type="text", size="30", autocomplete="off", class="card-number")
+
+  .form-row
+    .cc-text Name On Card
+    input(type="text", size="30", autocomplete="off", class="name-on-card")
+  
+  .form-row
+    .cc-text CVC
+    input(type="text", size="4", autocomplete="off", class="card-cvc")
+  
+  .form-row
+    .cc-text Expiration (MM/YYYY)
+    input(type="text", size="2", class="card-expiry-month")
+    span /
+    input(type="text", size="4", class="card-expiry-year")
+  
+  input(type="hidden", name="amount", value="2000", id="cc-amount")
+  button(type="submit", class="submit-button") Submit Payment
+
+//- div(id="error", class="hidden")
+//- div(id="success", class="hidden") Thanks for signing up at Browserling!
+
+
+.row
+  div(class="span4 offset4")
+    .row
+      .span4
+        h3 Shut up and take my money!
+      
+      form(stripe-form="handleStripe")
+        .span3
+          label Card Number
+          input(type="text", class="input-block-level", ng-model="number", payments-validate="card", payments-format="card")
+        
+        .span1
+          label Expiry
+          input(type="text", class="input-block-level", ng-model="expiry", payments-validate="expiry", payments-format="expiry")
+        
+        .span3
+          label Name On Card
+          input(type="text", class="input-block-level")
+        
+        .span1
+          label CVC
+          input(type="text", class="input-block-level", ng-model="cvc", payments-validate="cvc", payments-format="cvc")
+        
+        .span4
+          button(type="submit", class="btn btn-primary btn-large") Submit
+
+
+
+
+
+
+
+//- form(action="", method="POST", id="payment-form")
+  span(class="payment-errors")
+
+  .form-row
+    label
+      span Card Number
+      input(type="text", size="20", data-stripe="number")
+  
+  .form-row
+    label
+      span CVC
+      input(type="text", size="4", data-stripe="cvc")
+  
+  .form-row
+    label
+      span Expiration (MM/YYYY)
+      input(type="text", size="2", data-stripe="exp-month")
+    span /
+    input(type="text", size="4", data-stripe="exp-year")
+
+  button(type="submit") Submit Payment
+
+
+
+
+

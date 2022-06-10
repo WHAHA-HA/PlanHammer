@@ -1,0 +1,57 @@
+div.container
+  div.row
+    div.col-md-12
+      div.width800
+        h2 Projects
+        div.btn-row
+          a(id="create-new", class="btn btn-default btn-info", href="#/project/create") Create a New Project
+          div(class="btn-group toolbar pull-right", role="toolbar")
+            a(href="#/projects/created", ng-class="{active: type=='created'}", class="btn btn-default btn-tab") My Projects
+            a(href="#/projects/shared", ng-class="{active: type=='shared'}", class="btn btn-default btn-tab") Projects Shared With Me
+            //a(href="#/projects/assigned", ng-class="{active: type=='assigned'}", class="btn btn-default btn-tab") Tasks Assigned To Me
+
+      div(ng-if="projects.length == 0", class="width800")
+        br
+        div(ng-if="type == 'shared'")
+          div(class="well well-lg") You can only edit tasks or sub-tasks that are assigned to you as a planning collaborator.
+        div(ng-if="type == 'created'")
+          div(class="well well-lg") Create Your First Project By Clicking <a href="#/project/create">New</a>
+
+      div(ng-show="projects", class="width800")
+
+        br
+        div(ng-if="projects && type !== 'assigned'")
+          table(class="project-list table table-striped")
+            thead
+              tr
+                th Project Name
+                th Options
+            tbody
+              tr(ng-repeat="project in projects")
+                td(ng-class="{ delete_project: project.$process }")
+                  a(href="#/project/{{ project.id }}/show", ng-show="!project.$process") {{ project.name }}
+                td
+                  a(href="#/project/{{ project.id }}/show", ng-show="!project.$process") Open
+                  | &nbsp; | &nbsp;
+                  a(ng-if="type != 'shared'", href="#/project/{{ project.id }}/manage", ng-show="!project.$process", disabled) Settings
+                  | &nbsp; | &nbsp;
+                  a(ng-if="type != 'shared'", href="#", confirmed-click="removeProject(project, $index)", ng-confirm-click="Are you sure?", ng-show="!project.$process") Delete
+                  | &nbsp;
+                  span(class="glyphicon glyphicon-refresh", ng-show="project.$process")
+
+        //div(ng-if="tasks && type === 'assigned'")
+          table.project-list.task-list.table.table-striped
+            thead
+              tr
+                th Task Title
+                th Progress
+                th Created
+            tbody
+              tr(ng-repeat="task in tasks")
+                td {{ task.title }}
+                td.progress
+                  div.col-lg-9
+                    div(class="progress progress-striped", my-progress="task.complete")
+                    div(range-slider, class="range-slider", min="0", max="100", startlow="0", starthigh="100", step="5", ng-model="task.complete", ng-change="updateTask(task)")
+
+                td(am-time-ago="task.created_at")

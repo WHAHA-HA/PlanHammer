@@ -1,0 +1,32 @@
+ul.comments(ng-if="comment.children", style="padding-left: 20px", ng-init="parent=comment.children")
+  div(ng-repeat="comment in comment.children | orderByVotes | orderBy:created_at:true")
+    div(ng-if="comment._id")
+      li.comment.panel
+        .panel-heading.by-who
+          span.pull-left
+            b {{ comment.user.name.first + ' ' + comment.user.name.last}}
+          div.noselect
+            &nbsp;&nbsp;
+            span.glyphicon.glyphicon-arrow-up(ng-click="upvote(comment)", ng-style="{color: comment.upvote ? '#D24D57': '#58666e'}")
+            &nbsp;
+            span {{ comment.upvotes.length }}
+            &nbsp;
+            span.glyphicon.glyphicon-edit(ng-click="comment.editing = !comment.editing")
+            &nbsp;
+            span.glyphicon.glyphicon-remove(ng-click="remove_comment(comment, comments)")
+            span.pull-right(am-time-ago="comment.created_at")
+        .panel-body.text
+          span(ng-hide="comment.editing") {{ comment.text }}
+          .edit-comment(ng-show="comment.editing")
+            input(ng-model="comment.text")
+            &nbsp;
+            &nbsp;
+            span.label.label-info(ng-click="edit_comment(comment)") Edit
+          br
+          span.label.label-success.reply(ng-click="show_reply(comment)") reply
+          .add-comment.inside.panel.panel-default(ng-show="comment.show_reply")
+            .enter-text
+              textarea(ng-model="text", rows="3", placeholder="Your comment...")
+            .panel-footer
+              button.comment-btn.btn.btn-success.btn-sm.pull-right(ng-click="add_comment(text, currentNode, comment); text='';") Comment
+      ng-include(src ="'views/default/project/includes/comment'")

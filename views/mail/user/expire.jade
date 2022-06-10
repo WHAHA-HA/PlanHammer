@@ -1,0 +1,12 @@
+html
+  head
+    meta(charset='utf8')
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+  body
+    h1 Hello #{user.username}
+    p It looks like your Planhammer free trial has expired two weeks ago,
+    p if you do not upgrade within two weeks your account will be automatically deleted.
+    p We would love it if you can use our software to increase your productivity. Click 
+    p You have #{day} days left until your free account expires  
+      a(href="http://#{domain}/#/signin") here
+      |  to login.

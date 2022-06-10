@@ -1,0 +1,22 @@
+h2 Users list
+
+div
+  table(class="table table-hover")
+    thead
+      tr
+        th Username
+        th First Name
+        th Last Name
+        th Email
+        th Role
+        th Action
+    tbody
+      tr(ng-repeat="user in users")
+        td {{ user.username }}
+        td {{ user.name.first }}
+        td {{ user.name.last }}
+        td {{ user.email }}
+        td {{ user.role }}
+        td 
+          a(href="#/admin/user/{{ user.username }}") Show
+      

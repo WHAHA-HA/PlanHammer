@@ -1,0 +1,103 @@
+rect{
+  fill: white;
+  stroke: black;
+  stroke-width:1px;
+}
+/*rgb(206, 213, 218);*/
+circle{
+  fill: white;
+  stroke:steelblue;  
+  stroke-width:2px;
+}
+line{
+  stroke:#000;
+  stroke-width:1px;
+}
+.incRect{
+  stroke:black;
+  shape-rendering:crispEdges;
+}
+#incMatx text{
+  text-anchor:middle;
+  cursor:default;
+}
+#treesvg g text:hover, #treesvg g circle:hover{
+  cursor:pointer;
+}
+#navdiv{
+  background:#555;
+}
+#treesvg{
+  border:1px solid grey;
+}
+#labelpos{
+  color:white;
+}
+#navdiv button, #navdiv textarea{
+  vertical-align:middle;
+}
+#g_labels text{
+  text-anchor:middle;
+}
+#g_elabels text{
+  text-anchor:middle;
+  fill:red;
+  font-weight:bold;
+}
+
+
+
+#body {
+  width: 100%;
+  height: 100%;
+  overflow-x: visible;
+}
+
+#body input {
+  position: absolute;
+}
+
+svg {
+  overflow: scroll;
+}
+
+.node {
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.node:hover .toolbox, .node:hover circle, .node:hover .actionArrows {
+  display: block;
+}
+
+.node .toolbox, .node circle, .node .actionArrows {
+  display: none;
+}
+
+.node circle {
+  stroke: black;
+  stroke-width: 1;
+}
+
+
+.link {
+  fill: none;
+  stroke: #000;
+}
+
+.actionArrows.delete{
+  color: red;
+}
+.actionArrows.user{
+  color: #339933;
+}
+
+.toolbox{
+  border: none;
+  border-bottom: 1px solid #000;
+}

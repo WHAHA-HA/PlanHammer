@@ -1,0 +1,37 @@
+h2 User {{ user.username }} Info
+
+form(class="form-horizontal padder", role="form", name="userForm")
+  div(class="form-group", ng-show="message")
+    div(class="alert alert-{{ message.type }} col-lg-5") {{ message.text }} <br/>
+  div.form-group
+    label(for="inputUsername", class="col-lg-2 control-label") Current subscription
+    div.col-lg-3
+      p.form-control-static Free trial
+  div.form-group
+    label(for="inputUsername", class="col-lg-2 control-label") Username
+    div.col-lg-3
+      p.form-control-static {{ user.username }}
+  div.form-group
+    label(for="inputUsername", class="col-lg-2 control-label") First Name
+    div.col-lg-3
+      p.form-control-static {{ user.name.first }}
+  div.form-group
+    label(for="inputUsername", class="col-lg-2 control-label") Last Name
+    div.col-lg-3
+      p.form-control-static {{ user.name.last }}
+  div.form-group
+    label(for="inputUsername", class="col-lg-2 control-label") Email
+    div.col-lg-3
+      p.form-control-static {{ user.email }}
+  div.form-group
+    label(for="inputUsername", class="col-lg-2 control-label") Role
+    div.col-lg-3
+      p.form-control-static {{ user.role }}
+  div.form-group
+    label(for="inputUsername", class="col-lg-2 control-label") Address
+    div.col-lg-3
+      p.form-control-static {{ user.address }}
+  div.form-group
+    label(for="inputUsername", class="col-lg-2 control-label") Referral
+    div.col-lg-3
+      p.form-control-static {{ user.referral.name }}

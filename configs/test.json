@@ -1,0 +1,32 @@
+{
+  "domain": "localhost:3000",
+  "port": 3000,
+  "db": "mongodb://localhost:27017/mean_db_test",
+  "cookie_secret": "tas4skh@amm3r",
+  "google": {
+    "clientID": "APP_ID",
+    "clientSecret": "APP_SECRET",
+    "callbackURL": "http://localhost:3000/auth/google/callback",
+    "passReqToCallback": true
+  },
+  "mail": {
+    "type": "nodemailer",
+    "auth": {
+      "user": "mean.template@gmail.com",
+      "pass": "etalpmet"
+    },
+    "options": {
+      "service": "Gmail"
+    },
+    "from": {
+      "name": "TaskHammer",
+      "email": "mean.template@gmail.com"
+    }
+  },
+  "payment": {
+    "type": "stripe",
+    "options": {
+      "api_key": "sk_test_EvAuwqH3IBW7jm2EA39tWZmH"
+    }
+  }
+}

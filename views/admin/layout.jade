@@ -1,0 +1,17 @@
+div(class="navbar navbar-fixed-top")
+  div(class="navbar-inner")
+    ul(class="nav pull-right")
+      li
+        a(href="#") 
+          i(class="icon icon-envelope-alt") 
+          | Users
+      li
+        a(href="#") 
+          i(class="icon icon-th-large") 
+          | Projects
+
+div(class="container container-1", ng-controller="AppController")
+  div.row-fluid
+    span.span12
+      
+      ui-view

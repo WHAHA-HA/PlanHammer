@@ -1,0 +1,12 @@
+div.container
+  div.row
+    div.col-md-12
+      div(shortcut)
+      div.row
+      .row
+        div(ng-show="!tree || tree.length <= 0", class="well well-lg") Nothing to see here. First Create tasks and then you can define quality or acceptance criteria on this screen or in the attribute view of any task.
+
+        ul(id="task-list")
+          li( ng-repeat="node in tree")
+            ng-include(src ="'views/default/project/includes/quality_include.jade'")
+      div(ui-view="nodeForm")

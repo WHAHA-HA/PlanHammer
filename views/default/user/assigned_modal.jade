@@ -1,0 +1,9 @@
+script(type="text/ng-template", id="assignedModal.html")
+  div(class="modal-header")
+    button(type="button", class="close", ng-click="cancel()") &times;
+    h4(class="modal-title") Tasks Assigned
+  div(class="modal-body")
+    ul
+      li(ng-repeat="node in assignedNodes")
+        h4 {{node.title}}
+  div(class="modal-footer")

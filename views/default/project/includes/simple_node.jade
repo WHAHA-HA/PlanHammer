@@ -1,0 +1,68 @@
+span( id="{{node._id}}"
+    , ng-init="node.$indexes = node.$indexes || parent.slice(0) || 0;node.$indexes_humanize = node.$indexes_humanize || parent_humanize.slice(0); node.$indexes.push($index); node.$indexes_humanize.push($index + 1); parent = node.$indexes.slice(0); parent_index = node.$indexes_humanize.slice(0)"
+    , ng-mouseover="node.show_extra = true"
+    , ng-mouseout="node.show_extra = false"
+    , class="node-item"
+      )
+    span(class="taskicon taskicon-plus pull-left load-more"
+        , ng-click="expand(node)"
+        , ng-show="node.$collapsed")
+    span(class="taskicon taskicon-minus pull-left load-more"
+        , ng-click="collapse(node)"
+        , ng-show="!node.$collapsed && node._nodes.length > 0")
+    span(class="auto-number pull-left", ng-show="project.settings.show_numbers")
+        span(ng-bind="getPublicNumber(node)")
+    //- DELETE
+    span  &nbsp;&nbsp;
+    span(class="taskicon taskicon-share pull-left"
+        ng-show="node.show_extra"
+        ng-click="invite(node)")
+    
+    span(class="taskicon taskicon-remove pull-left"
+        ng-show="node.show_extra && !node.$editing"
+        confirmed-click="delete(node)"
+        ng-confirm-click="Are you sure? All sub-nodes will be also removed")
+    //- EDIT (tobe done...)
+    span(ng-dblclick="editTitle(node);")
+      span(class="editable"
+        ng-hide="node.$editing") {{ node.title }}
+    //- ADD NODE
+    span(class="taskicon taskicon-circle-arrow-down"
+        ng-show="node.show_extra && !node.$editing"
+        ng-click="getForm( node )")
+    //- ADD SUB-NODE 
+    span(class="taskicon taskicon-circle-arrow-right"
+        ng-show="node.show_extra && !node.$editing"
+        ng-click="getForm( node, 1 )")
+    //- SHOW INFO
+    span(class="taskicon taskicon-info"
+        ng-show="node.show_extra && !node.$editing"
+        ng-click="selectNode( node )")
+    //- NOTIFIERS
+    span(class="glyphicon glyphicon-pause"
+        ng-show="node.$waiting_update"
+        tooltip-placement="right"
+        tooltip="This node has been changed but not updated yet")
+    //- saving status icons
+    span(class="glyphicon glyphicon-refresh"
+        ng-show="node.$saving_process")
+    span(class="glyphicon glyphicon-ok-sign"
+        ng-show="node.$saved")
+    span(class="status status-{{node.$status.type}}"
+        ng-show="node.$status") {{ node.$status.text }}
+    form(ng-show="node.showInput || node.$editing", name="create_node_form", )
+      input(class="editable form-control edit-in-place input-md"
+        id="input{{node._id}}"
+        style="margin-top: 5px;"
+        ng-style="formCss"
+        name="newNodeTitle"
+        ng-model="eTitle"
+        focus-me="node.showInput || node.$editing" 
+        ng-enter="addNode( node, create_node_form )" 
+        ng-esc="cancelEdit(node, create_node_form)" 
+        focus-out="cancelEdit(node, create_node_form)"
+        ng-required="true" )
+
+ul(ng-if="node._nodes", ng-show="!node.$collapsed", style="list-style:none")
+    li( ng-repeat="node in node._nodes" )
+        ng-include(src ="'views/default/project/includes/simple_node'")

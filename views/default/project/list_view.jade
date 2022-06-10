@@ -1,0 +1,22 @@
+div.container
+  div.row
+    div.col-md-12
+      div(shortcut)
+      div.row
+      .row
+        ul(style = "list-style:none; padding-left: 0", id="task-list")
+          li( ng-repeat="node in tree")
+            ng-include(src ="'views/default/project/includes/simple_node'")
+        div.projectDetailToExport(class="col-lg-9 node-items")
+        div(class="col-lg-9 node-items", ng-if="tree.length == 0", ng-init="node={}")
+          button(ng-click="getInitForm( false  )", class="btn btn-info") Add First Task
+          form( ng-show="showInitForm", name="initForm", id="input{{node._id}}")
+            input(class="editable form-control init-form input-lg"
+               style="margin-top: 5px;"
+               ng-model="newNode.title"
+               name="newNodeTitle"
+               focus-me="true"
+               ng-enter="addNode( node, initForm )"
+               ng-esc="cancelEdit( node )"
+               focus-out="cancelEdit( node )")
+      div(ui-view="nodeForm")

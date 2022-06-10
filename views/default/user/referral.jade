@@ -1,0 +1,32 @@
+div.container
+  div.row
+    div.col-md-12
+      div(class="text-center")
+        h2 Invite people to use PlanHammer!
+        p Each person who signs up as a new account from your link gets you a free month's credit automatically applied to your account.
+        br
+
+      div
+        form(class="centered-form form-horizontal padder", role="form", name="referralForm")
+          div(class="form-group", ng-show="message !== null")
+            div(class="alert alert-{{ message.type }}") {{ message.text }} <br/>
+          div.form-group
+            label(for="inputEmail", class="control-label") Email
+            div
+              input(type="text", ng-model="referral.email", required, class="form-control", id="inputEmail", placeholder="Enter email of user")
+          div.form-group
+            label(for="inputMessage", class="control-label") Message
+            div
+              textarea(ng-model="referral.message", required, rows="4", class="form-control", id="inputMessage")
+          div.form-group
+            div
+              button(type="submit", class="btn btn-info pull-right", ng-click="invite(referral, referralForm)", ng-disabled="referralForm.$invalid") Invite Via Email
+        form.centered-form.form-horizontal.padder(role="form", name="referralLinkedInForm")
+          div.form-group
+            label.control-label(for="inputLinkedinMessage") Message
+            div
+              textarea.form-control(ng-model="referral.linkedInMessage", required, rows="4", id="inputLinkedinMessage")
+          div.form-group
+            div
+              a.share-links.linkedin.pull-right(href="", ng-click="shareInvitationToLinkedIn(referral, referralLinkedInForm)", ng-disabled="referralLinkedInForm.$invalid") Share with LinkedIn
+              button#sharePost.share-links.google-plus(class="g-interactivepost", data-contenturl="{{options.contenturl}}", data-contentdeeplinkid="{{options.contentdeeplinkid}}", data-clientid="{{options.clientid}}", data-cookiepolicy="{{options.cookiepolicy}}", data-prefilltext="{{options.prefilltext}}", data-calltoactionlabel="{{options.calltoactionlabel}}", data-calltoactionurl="{{options.calltoactionurl}}", data-calltoactiondeeplinkid="{{options.calltoactiondeeplinkid}}") Share with Google Plus

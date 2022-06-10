@@ -1,0 +1,34 @@
+div(class="navbar navbar-default navbar-fixed-top")
+  div.nav-bottom
+  div(class="container", ng-controller="ProjectListController")
+    div.navbar-header
+      button(type="button", class="navbar-toggle", data-toggle="collapse", data-target=".navbar-collapse")
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a(class="navbar-brand", id="navbar-brand", href="#") PlanHammer
+    div(class="navbar-collapse collapse")
+      ul(class="nav navbar-nav navbar-right")
+        li
+          a(href="", onClick="StartTour()") 
+            | Tour
+        li
+          a(href="#/referral") 
+            | Free Month
+        li.dropdown(ng-controller="ProjectManageController")
+          a(href="#/projects") Projects
+          ul( id="project-dropdown", class="dropdown-menu", role="menu" )
+            li.project-items( class="ng-scope", ng-repeat="project in projects" )
+              a(href="#/project/{{ project.id }}/show") {{project.name}}
+        li
+          a(href="#/feedback")
+            | Feedback
+        li
+          a(href="#/account/profile")
+            | Account
+        li
+          a( href="#/", ng-click="signout()" )
+            | Log Out
+
+div(class="container-fluid container-1", id="main-container", ng-controller="AppController")
+  ui-view

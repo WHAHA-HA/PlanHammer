@@ -1,0 +1,32 @@
+div.container
+  div.row
+    div.col-md-12
+      p.text-center Create a New Project
+      div(ng-include="'views/default/project/includes/import_modal'")
+
+      div(class="form-group", ng-show="message")
+        div(class="alert alert-{{ message.type }} col-lg-5") {{ message.text }} <br/>
+
+      div(ng-show="errors")
+        div(class="alert alert-danger")
+          ul(ng-repeat="error in errors")
+            li {{ error }}
+
+      div(ng-show="message.type != 'success'")
+        form(class="centered-form form-horizontal padder", role="form", name="projectForm")
+          div.form-group
+            label(for="inputName", class="control-label") Name
+            div
+              input(type="text", ng-model="project.name", required, class="form-control", id="inputName", placeholder="Enter Project Name")
+          div.form-group
+            label(for="inputDescription", class="control-label") Description
+            div
+              textarea(ng-model="project.description", rows="4", class="form-control", id="inputDescription")
+          div.form-group
+            label(for="use_quality", class="control-label") Use quality checklist completion for task progress?
+            div
+              input(type="checkbox", ng-model="project.use_quality", id="use_quality")
+          div.form-group
+            div
+              a(id="open-import-form", class="pull-left", ng-click="openImportForm();", style="cursor: pointer;") Import an existing project?
+              button(id="create-project-form", type="submit", class="btn btn-info pull-right", ng-click="create(project, projectForm)", ng-disabled="projectForm.$invalid") Create

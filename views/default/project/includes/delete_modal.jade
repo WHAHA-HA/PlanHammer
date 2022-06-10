@@ -1,0 +1,9 @@
+script(type="text/ng-template", id="deleteModal.html")
+  div(class="modal-header")
+    //- button(type="button", class="close", ng-click="cancel($event)") &times;
+    h3(class="modal-title") Delete sub tasks too?
+  div(class="modal-body invite")
+    button(class="btn-primary btn btn-lg", id="", ng-click="deleteTask()" ,style="margin-left: 30px") Keep
+    button(class="btn-primary btn btn-lg", id="{{node}}", ng-click="deleteNode()") Delete
+  div(class="modal-footer")
+

@@ -1,0 +1,35 @@
+div.container
+  div.row
+    div.col-md-12
+      .width500
+        h3 Project Settings
+
+        div.form-group(ng-show="message")
+          div(class="alert alert-{{ message.type }}") {{ message.text }} <br/>
+
+        div.project-manage(ng-show="project")
+          table.table.table-bordered
+            tr
+              td Project Name
+              td
+                div
+                  input.form-control(type="text", ng-model="project.name", ng-change="update('name', project.name)")
+            tr
+              td Auto-Number Activities
+              td
+                div
+                  input(type="checkbox", ng-model="project.settings.show_numbers", ng-change="update('show_numbers', project.settings.show_numbers)")
+            tr
+              td Timezone
+              td
+                div
+                  select(name="timezone", ng-model="project.timezone", ng-change="update('timezone', project.timezone)", ng-options="tz.value as tz.str for tz in timezones")
+          .row.logo-uploader
+            .col-sm-12.col-xs-24
+              form(role="form")
+                .form-group.image-uploader-form
+                  input(type="file", id="inputImage", name="image")
+                  img.project-logo(ng-src="/api/project/{{ project.id }}/image", ng-if="project.has_image")
+                  img.project-logo(ng-src="/img/no-image.png", ng-if="!project.has_image")
+                  button.btn.btn-success(type="submit", onclick="angular.element(this).scope().upload()") Upload Project Logo
+

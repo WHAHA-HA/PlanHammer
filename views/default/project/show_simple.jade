@@ -1,0 +1,37 @@
+div(shortcut)
+
+
+script(type="text/ng-template", id="node-tmpl")
+
+  h4 askdalsjdla
+
+  span(ng-mouseover="data.show_extra = true", ng-mouseout="data.show_extra = false", class="node-item", ng-if="data.hasOwnProperty('title')")
+    span(class="taskicon taskicon-plus pull-left load-more", ng-if="shouldLoadSubnodes(data) || data.$nodes_hidden", ng-click="loadSubnodes(data)", ng-show="!data.$loading_subnodes_process")
+    span(class="taskicon taskicon-minus pull-left load-more", ng-click="collapse(data)", ng-show="(data.$expanded || (!shouldLoadSubnodes(data) && !data.$nodes_hidden)) &&  data._nodes.length > 0")
+    span(class="glyphicon glyphicon-refresh pull-left", ng-show="data.$loading_subnodes_process")
+    span(class="auto-number pull-left", ng-show="project.settings.show_numbers")
+      span(ng-bind="getPublicNumber(data)")
+    span(class="taskicon taskicon-share pull-left", ng-show="data.show_extra && !data.$editing", ng-click="invite(data)")
+    | &nbsp;
+    span(class="taskicon taskicon-remove pull-left", ng-show="data.show_extra && !data.$editing", confirmed-click="delete(data)", ng-confirm-click="Are you sure? All sub-nodes will be also removed")
+    span(ng-dblclick="editTitle(data);", class="")
+      span(class="editable", ng-hide="data.$editing") {{ data.title }} 
+      form(ng-show="data.$editing")
+        input(class="editable form-control edit-in-place input-lg", ng-model="data.title", focus-me="data.$editing", ng-enter="doneEditing(data, $alt)", ng-esc="cancelEdit(data)", focus-out="cancelEdit(data)")
+    span(class="taskicon taskicon-circle-arrow-right", ng-show="data.show_extra && !data.$editing", ng-click="add(data, true)")
+    span(class="taskicon taskicon-circle-arrow-down", ng-show="data.show_extra && !data.$editing", ng-click="add(data)")
+    span(class="taskicon taskicon-info", ng-show="data.show_extra && !data.$editing", ng-click="selectNode(data)")
+    span(class="glyphicon glyphicon-pause", ng-show="data.$waiting_update", tooltip-placement="right", tooltip="This node has been changed but not updated yet")
+    //- saving status icons
+    span(class="glyphicon glyphicon-refresh", ng-show="data.$saving_process")
+    span(class="glyphicon glyphicon-ok-sign", ng-show="data.$saved")
+    span(class="status status-{{data.$status.type}}", ng-show="data.$status") {{ data.$status.text }}
+  
+  ul(ng-show="!data.$nodes_hidden")
+    li(ng-repeat="data in data._nodes", ng-include="'node-tmpl'", ng-class="{ editing: data.$editing == true }", ng-init="data.$indexes = data.$indexes || parent.slice(0); data.$indexes_humanize = data.$indexes_humanize || parent_humanize.slice(0); data.$indexes.push($index); data.$indexes_humanize.push($index + 1); parent = data.$indexes.slice(0); parent_index = data.$indexes_humanize.slice(0)")
+div.projectDetailToExport(class="col-lg-9 node-items")
+  div(class="col-lg-9 node-items")
+    button(ng-click="createNode(data)", class="btn btn-info") Add First Task
+  ul(id="task-list")
+    li(ng-repeat="data in tree", ng-include="'node-tmpl'", ng-class="{ editing: data.$editing == true }", ng-init="data.$indexes = data.$indexes || []; data.$indexes_humanize = data.$indexes_humanize || []; data.$indexes.push($index); parent = data.$indexes.slice(0); data.$indexes_humanize.push($index + 1); parent_humanize = data.$indexes_humanize.slice(0);")
+  //- {{ tree }}

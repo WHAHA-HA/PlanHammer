@@ -1,0 +1,67 @@
+doctype html
+html(ng-app="App", id="ng-app")
+  head
+    meta(charset='utf8')
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+
+    meta(name="google-signin-clientid", content="957065445007.apps.googleusercontent.com")
+    meta(name="google-signin-scope", content="https://www.googleapis.com/auth/plus.login")
+    meta(name="google-signin-requestvisibleactions", content="http://schemas.google.com/AddActivity")
+    meta(name="google-signin-cookiepolicy", content="single_host_origin")
+
+    base(href='/')
+    title PlanHammer
+    link(href='http://fonts.googleapis.com/css?family=Lato:300,400|Roboto+Condensed', rel='stylesheet')
+    link(rel='stylesheet', href='/lib/bootstrap/3.0.2/css/bootstrap.min.css')
+    link(rel='stylesheet', href='lib/bootstrap-tour/bootstrap-tour.min.css')
+    link(rel='stylesheet', href='/css/common.css')
+    link(rel='stylesheet', href='/css/card.css')
+    link(rel='stylesheet', href='/css/app.css')
+    link(rel='stylesheet', href='/css/svg.css')
+    link(rel='stylesheet', href='js/lib/nouislider/5.0.0/minified/jquery.nouislider.min.css')
+    link( href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css", rel="stylesheet" )
+    script(type="text/javascript", src="http://platform.linkedin.com/in.js").
+      api_key: 7538opeyuhga3z
+      scope: rw_nus
+      authorize: true
+
+    script.
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-10969633-7', 'taskhammer.com');
+
+    script(type="text/javascript").
+      (function() {
+       var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+       po.src = 'https://apis.google.com/js/client:plusone.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+
+  body
+    div.text-center 
+      div(id="logo")
+      h1(id="form-title") Reset Password
+    br
+
+    div(class="form-center", ng-controller="UserResetController")
+      form(class="user-form form-horizontal padder", role="form", name="resetForm")
+        div(class="form-group", ng-show="message")
+          div(class="alert alert-{{ message.type }}") {{ message.text }}   <br/>
+
+        div.form-group
+          div
+            input.form-control(type="password", required, ng-model="password", placeholder="New Password")
+        div.form-group  
+          div
+            input.form-control(type="password", required, ng-model="password2", placeholder="Password Again")
+              
+        div.form-group.signup-buttons
+          button(type="submit", class="btn btn-info", ng-click="completeReset(password, password2)", ng-disabled="userForm.$resetForm") Reset
+
+    include ../../scripts
+    div.container-fluid
+      div.container
+        nav(class="navbar navbar-default navbar-fixed-bottom")
+          div(class="navbar-inner")

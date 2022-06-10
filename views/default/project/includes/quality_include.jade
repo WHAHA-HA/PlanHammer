@@ -1,0 +1,25 @@
+span( id="{{node._id}}", class="node-item")
+  span(class="taskicon taskicon-plus pull-left load-more", ng-click="expand(node)", ng-show="node.$collapsed")
+  span(class="taskicon taskicon-minus pull-left load-more", ng-click="collapse(node)", ng-show="!node.$collapsed && node._nodes.length > 0")
+  span(class="auto-number pull-left", ng-show="project.settings.show_numbers")
+    span(ng-bind="getPublicNumber(node)")
+  span
+    span(class="editable") {{ node.title }}
+  .quality-view(ng-show="!node.$collapsed")
+    ul.quality-list
+      li(ng-repeat="quality in node._quality")
+        div(ng-hide="quality.editMode", ng-dblclick="quality.editMode = true;")
+          input(type="checkbox", ng-model="quality.completed", ng-change="updateQuality(node, quality)")
+          | &nbsp;
+          span(ng-class="{ checked: quality.completed }") {{ quality.text }}
+          span.remove(class="glyphicon glyphicon-remove-sign", ng-click="deleteQuality(node, quality)")
+        div(ng-show="quality.editMode")
+          input(type="text", ng-model="quality.text", ng-blur="updateQualityText(node, quality)", focus-me="quality.editMode", ng-enterup="updateQualityText(node, quality)", class="form-control quality-edit")
+      .show-input(ng-click="node.showQualityInput=true", ng-hide="node.showQualityInput")
+        + Add Quality Criteria
+      .add-quality(ng-show="node.showQualityInput")
+        input(type="text", placeholder="Add an item...", ng-model="node.$qualityText", ng-blur="node.showQualityInput=false", focus-me="node.showQualityInput" , ng-enterup="addQuality(node)", class="form-control")
+
+ul(ng-if="node._nodes", ng-show="!node.$collapsed", style="list-style:none")
+  li( ng-repeat="node in node._nodes" )
+    ng-include(src ="'views/default/project/includes/quality_include'")

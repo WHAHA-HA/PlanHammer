@@ -1,0 +1,75 @@
+  div(id="drawArea", ng-controller="schemeController")
+    .row
+      div.projectDetailToExport(class="col-lg-9 node-items")
+      div(class="col-lg-9 node-items", ng-if="tree.length == 0", ng-init="node={}")
+        button(ng-click="getInitForm( false  )", class="btn btn-info") Add First Task
+        form( ng-show="showInitForm", name="initForm", id="input{{node._id}}")
+          input(class="editable form-control init-form input-lg"
+             style="margin-top: 5px;"
+             ng-model="newNode.title"
+             name="newNodeTitle"
+             focus-me="true"
+             ng-enter="scheme.boxes.addNewNode( 'up', null )"
+             ng-esc="cancelEdit( node )"
+             focus-out="cancelEdit( node )")
+    //- LINES
+    div(ng-repeat="connectorLine in scheme.connectors.lines", ng-style=" {'left': connectorLine.left + 'px', 'top': connectorLine.top + 'px', 'height': connectorLine.height + 'px', 'width': connectorLine.width + 'px'}", class="schemeBorder {{connectorLine.parentClass}}" )
+    div(ng-click="scheme.connectors.clickConnectorIcon(connectorIcon);", id="cIcon{{connectorIcon._id}}", ng-repeat="connectorIcon in scheme.connectors.icons", ng-style="{'left': connectorIcon.left + 'px', 'top': connectorIcon.top+ 'px'}", class="connectorHideShowIcon") {{connectorIcon.val}}
+    div(ng-repeat="ghost in scheme.dragDrop.ghosts", id="ghost{{ghost._id}}", ng-style="{'margin-left' : scheme.dragDrop.ghostsPosition.x + 'px', 'margin-top' : scheme.dragDrop.ghostsPosition.y + 'px', 'left': ghost.left + 'px', 'top': ghost.top + 'px', 'height' : ghost.height +'px', 'width' : ghost.width + 'px'}", class="ghostBox" )
+    //- BOXES
+    div(ng-repeat="schemeItem in scheme.data", id="box{{schemeItem._id}}"
+      ng-style="{ 'left': schemeItem.left +'px', 'top': schemeItem.top +'px', 'height': schemeItem.height + 'px', 'width': schemeItem.width +'px'}"
+      class="schemeBox" 
+      ng-mouseover="scheme.boxes.hoverIconsBox('over', schemeItem)"
+      ng-mouseleave="scheme.boxes.hoverIconsBox('out', schemeItem)"
+      ng-dblclick="scheme.boxes.showForm(schemeItem)"
+      )
+      //- title
+      div(ng-show="schemeItem.titleEdit") 
+        input(type="text", value=""
+          , focus-me="schemeItem.titleEdit"
+          , ng-model="schemeItem.title"
+          , ng-enter="scheme.boxes.doneEditingTitle(schemeItem)"
+          , ng-blur="scheme.boxes.doneEditingTitle(schemeItem)"
+          , ng-esc="scheme.boxes.doneEditingTitle(schemeItem)"
+          , focus-out="scheme.boxes.doneEditingTitle(schemeItem)")
+
+      //- icons
+      div.icon-cont
+        div.task-title
+          {{schemeItem.title}}
+        div(ng-repeat="arrow in scheme.boxes.arrows"
+          class="glyphicon glyphicon-circle-arrow-{{arrow.label}}"
+          ng-click="scheme.boxes.addNewNode( arrow.label, schemeItem )"
+          id="newNodeArrow_{{arrow.label}}"
+          ng-show="schemeItem.showArrows"
+          )        
+        //- ICON BOX
+        div(class="icons arrow_box"
+          id="d_icon_box"
+          ng-style="{'left': scheme.boxes.hoverIcons.left, 'top' : scheme.boxes.hoverIcons.top}"
+          ng-mouseover="scheme.boxes.hoverIconsBox('over', schemeItem)"
+          ng-mouseleave="scheme.boxes.hoverIconsBox('out', schemeItem)"
+          ng-show="schemeItem.showArrows")
+
+          //- share
+          div(class="taskicon taskicon-share"
+            ng-style="scheme.boxes.icons.share.css"
+            ng-click="invite(schemeItem)")
+          //- remvoe
+          div(class="taskicon taskicon-remove"
+            ng-style="scheme.boxes.icons.remove.css" 
+            confirmed-click="scheme.boxes.deleteNode(schemeItem)"
+            ng-confirm-click="Are you sure? All sub-nodes will be also removed")
+          //- info
+          div(class="taskicon taskicon-info"
+            ng-style="scheme.boxes.icons.info.css"
+            ng-click="selectNode(schemeItem)")
+
+
+
+                //- //-  DRAG AND DROP ICONS ?
+                //- div(ng-repeat="arrow in scheme.dragDrop.arrows"
+                //-   id="ddArrow_{{arrow.label}}"
+                //-   ng-hide="arrow.show"
+                //-   ng-style="{'left' : arrow.x +'px', 'top' : arrow.y +'px'}")

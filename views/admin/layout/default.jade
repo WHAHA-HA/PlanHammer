@@ -1,0 +1,28 @@
+div(class="navbar navbar-default navbar-fixed-top")
+  div(class="container", ng-controller="AppController")
+    div.navbar-header
+      button(type="button", class="navbar-toggle", data-toggle="collapse", data-target=".navbar-collapse")
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a(class="navbar-brand", href="#") Admin of MEAN Project
+    div(class="navbar-collapse collapse")
+      ul(class="nav navbar-nav navbar-right")
+        li
+          a(href="#/admin/users") 
+            | Users
+        li
+          a(href="#/admin/projects") 
+            | Projects
+        li
+          a(href="#/") 
+            | Go to Site
+        li
+          a(href="#", ng-click="signout()")
+            | Log Out
+
+div(class="container container-1", ng-controller="AppController")
+  div.row
+    span.col-md-12
+
+      ui-view

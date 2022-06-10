@@ -1,0 +1,39 @@
+{
+  "domain": "localhost:3000",
+  "port": 3000,
+  "db": "mongodb://localhost:27017/plan_hammer_dev",
+  "cookie_secret": "tas4skh@amm3r",
+  "google": {
+    "clientID": "279263499767.apps.googleusercontent.com",
+    "clientSecret": "2WMlfZGY1TYT73IVcWRz3iGK",
+    "callbackURL": "http://localhost:3000/auth/google/callback",
+    "passReqToCallback": true
+  },
+  "mail": {
+    "type": "mandrill",
+    "auth": {
+      "apikey": "L48WEPeoVJiqek2AF6lzUg"
+    },
+    "options": {
+      "service": "PlanHammer"
+    },
+    "from": {
+      "name": "PlanHammer",
+      "email": "support@planhammer.io"
+    }
+  },
+  "payment": {
+    "type": "stripe",
+    "options": {
+      "api_key": "sk_test_T7SvXG2c9LDzqTukIYvcEv7b"
+    }
+  },
+  "analytics": {
+    "accountId": "UA-10969633-9",
+    "domain": "dev.planhammer.io"
+  },
+  "aws": {
+    "id": "AKIAJYKRKNTJNYN6PAXQ",
+    "key": "6CdJ3x7+ZdFPALiQY5lCFDV+0SNE/Q35cYSra2ZB"
+  }
+}

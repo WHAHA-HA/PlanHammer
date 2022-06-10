@@ -1,0 +1,85 @@
+script(type="text/ng-template", id="showRiskModal.html")
+  div.modal-header
+    button(type="button", class="close", ng-click="close()") &times;
+    h4(class="modal-title") Risk: {{ risk.name }}
+  div.modal-body.table-responsive
+    table.table.table-hover
+      thead
+        tr
+          th Name
+          th Topic
+          th Level
+          th Probability
+          th Impact
+          th Score
+          th Mitigation
+          th Contingency
+          th Consequence
+          th Associated Task
+      tbody
+        tr
+          td {{ risk.name }}
+          td {{ risk.topic }}
+          td {{ risk.level }}
+          td {{ risk.probability }}
+          td {{ risk.impact }}
+          td {{ risk.score }}
+          td.field-mitigation {{ risk.mitigation }}
+          td.field-contingency {{ risk.contingency }}
+          td.field-consequence {{ risk.consequence }}
+          td {{ risk.task.title }}
+
+script(type="text/ng-template", id="newRiskModal.html")
+  div.modal-header
+    button(type="button", class="close", ng-click="close()") &times;
+    h4(class="modal-title") New Risk
+  div.modal-body.new-risk-modal
+    form(class="form-horizontal padder", role="form", name="riskForm")
+      div(class="form-group", ng-show="message")
+        div(class="alert alert-{{ message.type }} col-lg-9") {{ message.text }} <br/>
+      div.form-group
+        label(for="riskName", class="col-lg-3 control-label") Name
+        div.col-lg-9
+          input(type="text", required, ng-model="currentNode.$risk.name", class="form-control", id="riskName")
+      div.form-group
+        label(for="riskTopic", class="col-lg-3 control-label") Topic
+        div.col-lg-9
+          input(type="text", required, ng-model="currentNode.$risk.topic", class="form-control", id="riskTopic")
+      div.form-group
+        label(for="riskLevel", class="col-lg-3 control-label") Level
+        div.col-lg-9
+          input(type="number", required, min="1", max="9", ng-model="currentNode.$risk.level", class="form-control", id="riskLevel")
+      div.form-group
+        label(for="riskProbability", class="col-lg-3 control-label") Probability
+        div.col-lg-9
+          div(class="progress progress-striped", my-progress="currentNode.$risk.probability || 0")
+          div(range-slider, class="range-slider", min="0", max="100", startlow="0", starthigh="100", step="5", ng-model="currentNode.$risk.probability")
+      div.form-group
+        label(for="riskImpact", class="col-lg-3 control-label") Impact
+        div.col-lg-9
+          label(id="riskImpactLabel", class="control-label") {{ currentNode.$risk.impact || 0}}
+          div(range-slider, class="range-slider", min="0", max="100", startlow="0", starthigh="100", step="1", ng-model="currentNode.$risk.impact")
+      div.form-group
+        label(for="riskScore", class="col-lg-3 control-label") Risk Score
+        div(class="form-inline col-lg-9")
+          label(id="riskScore", class="control-label") {{ (currentNode.$risk.probability * currentNode.$risk.impact) || 0 }}
+      div.form-group
+        label(for="riksMitigation", class="col-lg-3 control-label") Mitigation
+        div.col-lg-9
+          textarea(ng-model="currentNode.$risk.mitigation", rows="3", class="form-control", id="riksMitigation")
+      div.form-group
+        label(for="riksContingency", class="col-lg-3 control-label") Contingency
+        div.col-lg-9
+          textarea(ng-model="currentNode.$risk.contingency", rows="3", class="form-control", id="riksContingency")
+      div.form-group
+        label(for="riksConsequence", class="col-lg-3 control-label") Consequence
+        div.col-lg-9
+          textarea(ng-model="currentNode.$risk.consequence", rows="3", class="form-control", id="riksConsequence")
+      div.form-group
+        label(for="inputNode", class="col-lg-3 control-label")
+        div.col-lg-9
+          input(type="text", id="inputNode", class="form-control input-lg", required, autocomplete="off", typeahead="node.title for node in nodeByTitle($viewValue)", typeahead-editable="true", placeholder="Please enter task name",  typeahead-min-length='2', typeahead-on-select="nodeSelected($item, $model, $label)", ng-model="currentNode.node_title",)
+      div.form-group
+        div.col-lg-9
+          button.btn.btn-success(ng-click="addRisk(currentNode, riskForm)") Save
+

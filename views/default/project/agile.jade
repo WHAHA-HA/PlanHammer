@@ -1,0 +1,144 @@
+div( ng-controller="agileController")
+  div(ui-view="nodeForm")
+  .row
+    input(class="form-control"
+      ng-if="newTaskTitle.editting"
+      id="list_edit_form"
+      ng-model="newTaskTitle.title"
+      focus-me="data.$editing"
+      ng-enter="doneEditing(data, $alt)"
+      ng-esc="cancelEdit(data)"
+      focus-out="cancelEdit(data)")
+    tabset
+      div.pull-right(ng-if="!sortable.board_title_form", id="add-new-board", heading="", ng-click="sortable.board.show_form()") + Create New Board
+      div.create-new-board.pull-right(ng-if="sortable.board_title_form")
+        input.editable.form-control.edit-in-place(type="text"
+          placeholder="enter board name"
+          id="createNewBoardForm"
+          ng-enter="sortable.board.create()"
+          focus-me="sortable.board_title_form" 
+          ng-esc="sortable.board.hide_form()"
+          focus-out="sortable.board.hide_form()"
+          ng-model="sortable.new.board_name")
+        | &nbsp; &nbsp;
+      br( ng-if="!sortable.boards.length > 0" )
+      div( ng-if="!sortable.boards.length > 0", class="well col-xs-8 well-lg ng-scope", id="createNewBoardWell" ) 
+        span.click-text(ng-click="sortable.board.show_form()") "Create New Board" 
+        span to get started.
+      tab( heading="{{board.name}}" , ng-click="sortable.board.set_default(board)", ng-repeat="board in sortable.boards", ng-dblclick="sortable.board.rename('#board_'+board._id, board )", active="board.default", id="{{'board_'+board._id}}")
+        br
+          //- borad
+        div.board(id="{{board._id}}")
+          //- add new list / board options
+          div.listControllRow.row
+            div.listControll.left.col-xs-10(style="height: 30px")
+              span.text.green(id="add-new-list", ng-click="sortable.list.show_form()") + New List...
+              .agile-input-container(ng-if ="sortable.list.form_visible")
+                input.pull-left.editable.form-control.edit-in-place(type="text"
+                  id='createNewListForm'
+                  style="margin-left: -10pxx"
+                  placeholder="Name"
+                  focus-me="sortable.list.form_visible" 
+                  ng-model="sortable.new.list_name"
+                  ng-enter="sortable.list.create(sortable.new.list_name, board)"
+                  ng-esc="sortable.list.hide_form()"
+                  focus-out="sortable.list.hide_form()")
+                | &nbsp; &nbsp;
+                button.btn.btn-primary(type="submit",  ng-click="createList(listName, board)") Create List
+            div.listControll.righ.col.col-xs-2
+              .btn-group.pull-right( dropdown, is-open="status.isopen" )
+                button( type="button", ng-click="stashButton($event )", class="btn btn-primary dropdown-toggle pull-right", dropdown-toggle, id="boardOptions")
+                  i(class="fa fa-gear")
+                ul(  id="board-settings", class="dropdown-menu", role="menu")
+                  //- li.dr-item(ng-click="sortable.board.set_default(board)") Set as default
+                  li.dr-item(ng-click="sortable.board.rename('#board_'+board._id, board )") Rename Board
+                  li.dr-item(ng-click="sortable.board.remove( board )") Delete Board
+
+          //- list box
+          br( ng-if="!board.lists.length > 0" )
+          div( ng-if="!board.lists.length > 0", class="well col-xs-8 well-lg ng-scope" ) Create your first list by clicking 
+            span.click-text(ng-click="sortable.list.show_form()") "New List".
+
+          ul(style="list-style: none; width:{{board.width+'px'}}; margin-left: -70px; margin-top: 20px;")
+            li(id="agile-board")      
+              //- list
+              ul.sortable-basic.sortable(id="{{list._id}}", ng-repeat="list in board.lists")
+                row.list
+                  //- list header row
+                  .title-row
+                    h2.list-title.handler(id="title_{{list._id}}", ng-dblclick="sortable.list.rename( '#title_'+list._id, list, board )") {{list.name}}
+                    //- icon.default-list-icon.label.label-primary.list-default(ng-hide="list.default", ng-click="setListDefault(list, board)") Set Default
+                    //- icon( ng-show="list.default", class="default-list-icon label label-success list-default default-list-icon") Default
+                    //- icon.delete-agile-list.delete.glyphicon.glyphicon-remove-sign(ng-click="removeList(list, board)")
+                    i.fa.fa-plus.pull-right(ng-click="sortable.list.open_panel(list)", id="import-task-icon")
+                .list-footer
+                  div
+                    span.create-agile-task.text.green(ng-click="sortable.task.create(list)", ng-if="!sortable.active_task || sortable.active_task.list._id != list._id") Create Task 
+                    span.create-agile-task.text.green(ng-if="sortable.active_task && sortable.active_task.list._id == list._id", dropdown-toggle) Create Task 
+                    i.fa.fa-caret-down(ng-if="sortable.active_task && sortable.active_task.list._id == list._id", id="createTaskCaret", dropdown-toggle)
+                    ul( ng-if="sortable.active_task && sortable.active_task.list._id == list._id", id="create-settings", class="dropdown-menu", role="menu")
+                      li.dr-item(ng-click="sortable.task.create(list)") Add Task
+                      li.dr-item(ng-click="sortable.task.create(list, 'child')") Add Child Task
+                  //- i.fa.fa-gear.pull-right.delete-agile-list()
+                  div.btn-group(dropdown, style="position: initial;")
+                    button(
+                      type="button"
+                      ng-click="stashButton($event )"
+                      class="btn btn-primary pull-right dropdown-toggle"
+                      id="listOptions"
+                      dropdown-toggle
+                      style="padding-right: 7px;")
+                      i.fa.fa-gear.pull-right.delete-agile-list(style="position: initial;")
+                    ul( id="list-settings", class="dropdown-menu", role="menu")
+                      li.dr-item(ng-click="sortable.list.open_panel(list)") Import Tasks
+                      //- li.dr-item(ng-hide="list.default", ng-click="setListDefault(list, board)") Set as default
+                      li.dr-item(ng-click="sortable.list.rename( '#title_'+list._id, list, board )" ) Rename List
+                      li.dr-item(ng-click="sortable.list.remove( list, board )") Delete List
+                      li.dr-item(ng-click="sortable.list.remove_all_tasks( list, board )") Clear List
+              
+                //- task box
+                li( ng-repeat="task in list.nodes | orderBy : task.position"
+                  class="agile-task in-list {{list._id}}"
+                  board-id="{{board._id}}"
+                  id="{{task._id}}"
+                  list-id="{{list._id}}"
+                  node-id="{{task._id}}" 
+                  ng-dblclick="sortable.task.rename( '#'+task._id, task)"
+                  ng-click="sortable.set_active_task(task, list)"
+                  )
+                  h5.agile-task-title{{ task.title  | cut:true:28:' ...' }}
+                  img(id="agile-avatar", ng-src="/api/user/{{user}}/image")
+                  span.agile-task-controll.muted.pull-right.handler1()
+                    i.fa.fa-times.delete-icon(dropdown-toggle, style="color: white", ng-click="setsortable.active_task(task)" )
+                    ul( id="delete-options", class="dropdown-menu", role="menu" )
+                      li.dr-item(ng-click="sortable.task.remove( task._id, list, board, task, true)") Remove from List
+                      li.dr-item(ng-click="sortable.task.delete( task._id, list, board, task )") Delete
+                  span.agile-task-controll.muted.pull-right.handler1(ng-click="sortable.task._selectNode( task, list, node )", style="color: white")
+                    i.fa.fa-info-circle(style="color: green;")
+
+                //- import box
+                div.task-import-board.animate-i(click-outside="sortable.list.close_panel(list)", outside-if-not="import-task-icon", ng-enter="logDashit()" ,ng-show="list.active_panel", style="z-index: 9999" )
+                  div(class="agile-task-list-addon")
+                    input.editable.form-control.edit-in-place(type='text', id="agile-task-list-search", ng-model="search", ng-click="")
+                    span( class="label label-success list-default",id="add-node", style="margin-right: 2px;", ng-click="sortable.list.add_tasks(list, board)") Add
+                    span( ng-show="!list.markedAll", dropdown-toggle, class="label label-success list-default") Add by user
+                    ul(id="users-dropdown" ,class="dropdown-menu", role="menu")
+                      li.dr-item(ng-if="!project.users.length > 0") Assign tasks to users first
+                      li.dr-item(ng-repeat="user in project.users", ng-click="sortable.list.add_user_tasks(user.user.id, list, board)"){{user.user.email}}
+
+                  //- Task (import box)
+                  div(id="agile-task-list", ng-if="list.active_panel")
+                    div.col-xs-12.agile-task.agile-import-task(
+                      id="{{task._id}}"
+                      class="{{list._id}} .agile-import-task .agile-task pull-right"
+                      ng-repeat="task in sortable.tasks | filter: {isInList: false} | filter: search"
+                      ng-click="sortable.list.prepare_to_add(task._id, list)")
+                      h5.agile-task-title {{ task.title | cut:true:23:' ...' }}
+
+  input.editable.form-control.edit-in-place(type="text"
+    id="newTaskInput"
+    placeholder="enter board name"
+    ng-enter="editTask('title')"
+    ng-esc="removedForm(newTaskInput)"
+    focus-out="removeForm(newTaskInput, $this)"
+    ng-model="new.taskName") 

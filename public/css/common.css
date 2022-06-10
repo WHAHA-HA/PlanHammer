@@ -1,0 +1,559 @@
+/*
+  Common styles and overrides. Will be exported with the zip file download.
+*/
+
+/* Make fonts behave on Macs */
+* {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Default link colors */
+a {
+  color: #339933;
+}
+a:hover, a:focus {
+  color: #338283;
+}
+
+/* Make Icons look better */
+[class^="icon-"]::before, [class*=" icon-"]::before {
+  vertical-align: baseline;
+  line-height: 1em;
+  color: inherit;
+}
+i.icon{
+  text-align: center;
+  background-image: none;
+}
+
+/* Centering elements */
+body .pull-center{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Add left/right margins to centered text */
+.text-center {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+/* Specify max width for centered paragraphs */
+.text-center p {
+  display: inline-block;
+  max-width: 500px;
+}
+
+/* Centered Widths */
+div.width350 {
+  width: 350px !important;
+  margin: auto !important;
+}
+div.width500 {
+  max-width: 500px;
+  margin: auto;
+  text-align: center;
+}
+div.width800 {
+  width: 800px;
+  margin: auto;
+  text-align: center;
+}
+
+/* User forms - Beta Logo */
+div#logo {
+  display: block;
+  width: 350px;
+  height: 105px;
+  margin: auto;
+  background: url('../img/beta.png') no-repeat;
+  background-size: 100% auto;
+}
+@media screen and (min-width:768px) {
+  div#logo {
+	width: 600px;
+	height: 180px;
+  }
+}
+
+/* User forms - Form title */
+h1#form-title {
+  font-size: 20px;
+  margin-top: 25px;
+  margin-bottom: 5px;
+}
+@media screen and (min-width:768px) {
+  h1#form-title {
+	margin-top: 40px;
+  }
+}.user-form
+
+/* User forms - Sub Label */
+.user-form p.sub-label {
+  margin: 2px;
+  margin-left: 5px;
+}
+
+/* User forms - Form wrapper */
+.form-center {
+  margin: auto;
+  max-width: 250px;
+}
+
+/* User forms - Adjust form spacing */
+.user-form .form-group {
+  margin-bottom: 10px;
+}
+
+div.signup-buttons.form-group {
+  margin-top: 20px;
+}
+
+/* Make all form buttons green */
+.btn-info, .btn-info.disabled, .btn-info[disabled], fieldset[disabled] .btn-info, .btn-info.disabled:hover, .btn-info[disabled]:hover, fieldset[disabled] .btn-info:hover, .btn-info.disabled:focus, .btn-info[disabled]:focus, fieldset[disabled] .btn-info:focus, .btn-info.disabled:active, .btn-info[disabled]:active, fieldset[disabled] .btn-info:active, .btn-info.disabled.active, .btn-info[disabled].active, fieldset[disabled] .btn-info.active, .btn-info:hover, .btn-info:focus, .btn-info:active, .btn-info.active, .open .dropdown-toggle.btn-info, .btn-primary
+
+{
+  color: #ffffff;
+  background-color: #339933;
+  border-color: #338232;
+}
+.btn-info:hover,
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary
+{
+  background-color: #338232;
+  border-color: #338232;
+}
+
+/* Make form glow green */
+.form-control:focus {
+border-color: rgb(50,130,50);
+outline: 0;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(50,130,50,0.6);
+box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(50,130,50,0.6);
+}
+
+/* Form links */
+a.form-link {
+  color:#000000; 
+  text-decoration: underline;
+}
+a.form-link:hover {
+  text-decoration: underline; 
+  cursor: pointer;
+}
+
+/* User forms - alert boxes */
+.user-form .alert {
+  margin: 10px 0px;
+}
+
+/* User forms - Google connect link */
+a#connect-google {
+  background: url('../img/connect-google.png') no-repeat left center;
+  color: #000000;
+  cursor: pointer;
+  display: block;
+  float: left;
+  height: 24px;
+  line-height: 1.8em;
+  /*margin-left: 5px;*/
+  padding-left: 34px;
+  margin-top: auto;
+  margin-bottom: auto;
+  opacity: 0.6;
+}
+
+a#connect-google:hover {
+  opacity: 1.0;
+}
+
+/* Share links */
+.share-links {
+  color: #000000;
+  cursor: pointer;
+  display: block;
+  height: 30px;
+  line-height: 2.2em;
+  margin-left: 5px;
+  padding-left: 34px;
+  margin-top: auto;
+  margin-bottom: auto;
+  opacity: 0.6;
+  text-align: left;
+}
+.share-links:hover {
+  color: #000000;
+  opacity: 1.0;
+  text-decoration: none;
+}
+
+/* Share: Google+ */
+button.google-plus {
+  /* un-button-ify */	
+	padding: 0px;
+	background-color: transparent;
+	border: none;
+  
+  background: url('../img/connect-google.png') no-repeat left center;
+  padding-left: 34px;   
+}
+
+/* Share: LinkedIn */
+a.linkedin {
+  background: url('../img/linkedin2.jpg') no-repeat left center;
+  background-size: 25px;
+}
+
+.btn-wide {
+  width: 100%;
+}
+
+form.width300 {
+  margin: auto;
+  max-width: 300px;
+}
+
+/* Wide centered form */
+form.centered-form {
+  margin: auto;
+  max-width: 325px;
+}
+@media screen and (min-width:768px) {
+  form.centered-form {
+    max-width: 400px;
+  }
+}
+
+/* Centered form with labels to the side */
+@media screen and (max-width: 991px) {
+  form.sm-centered-form {
+    margin: auto;
+    max-width: 325px;
+  }
+}
+
+/* Project Toolbar */
+.project-toolbar {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/*hack for toolbar spacing problem*/
+/*@media screen and (-webkit-min-device-pixel-ratio:0) { */
+  /*.project-toolbar {*/
+    /*margin-top: 20px;*/
+    /*margin-bottom: 20px;*/
+  /*}*/
+/*}*/
+
+
+.btn-toolbar .btn-group.right {
+float: none;
+}
+
+.project-toolbar .pull-right label {
+margin: 0px 10px;
+}
+
+/* Toolbar buttons with icons */
+.project-toolbar .btn-icon {
+  background-position: 4px 4px; 
+  background-repeat: no-repeat;
+  margin: 0px;
+  padding-left: 35px;
+}
+
+/* Toolbar buttons with icons without text */
+.project-toolbar .btn-icon.no-text {
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 40px;
+  height: 34px;
+}
+
+/* Button icons */
+.btn-icon.pdf {
+  background-image: url('../img/pdf-icon.png');
+  background-size: 25px;
+}
+.btn-icon.csv {
+  background-image: url('../img/csv-icon.png');
+  background-size: 25px;
+}
+.btn-icon.xml {
+  background-image: url('../img/xml-icon.png');
+  background-size: 25px;
+}
+
+/* Tabs */
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+  background-color: #339933;
+  border-bottom: 1px solid #ddd;
+  border-color: #338232;
+  color: #FFFFFF;
+}
+
+.nav-tabs>li>a {
+  border: 1px solid #CCC;
+  color: #333;
+  cursor: pointer;
+  padding: 6px 15px;
+  margin: 0;
+}
+
+.nav-tabs>li>a:hover {
+border-color: #CCC #CCC #ddd;
+}
+
+/* Confirmation page */
+
+/* Confirmation alert */
+.email-conf {
+  margin-bottom: 50px;
+}
+
+/* Confirmation Signin Form */
+.form-group.conf button {
+  float: right!important;
+}
+.form-group.conf #connect-google {
+  margin-top: 5px;
+}
+
+/* Payment Form */
+
+.cardinfo div {
+    display: inline-block;
+}
+.cardinfo input {
+    display: inline-block;
+    margin: 0 5px;
+}
+.cardinfo .left {
+    width: 35%;
+}
+.cardinfo .right {
+  width: 65%;
+  text-align: right;
+}
+.cardinfo label {
+    margin-right: 2px;
+}
+.cardinfo input#expyear {
+    width: 70px;
+    margin-right: 0;
+}
+
+.cardinfo .right input#expdate {
+  width: 84px;
+}
+
+.cardinfo .left input {
+    width: 50px;
+}
+.cardinfo input#expmonth {
+    width: 52px;
+}
+
+.btn-row .btn {
+    float: left;
+}
+div.btn-row {
+    margin-top: 30px;
+    padding-bottom: 40px;
+}
+.btn-tab.active {
+    color: #ffffff; 
+    background-color: #339933; 
+    border-color: #338232;
+}
+div.project-list {
+    margin: 35px 0;
+    width: 100%;
+    display: block;
+}
+.project-list table {
+    width: 100%;
+    margin: auto;
+    clear: both;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; 
+    font-size: 14px;
+}
+.project-list tr td:first-child, 
+.project-list tr th:first-child {
+    width: 66%;
+    text-align: left;
+    padding-left: 20px;
+}
+.project-list tr td:last-child, 
+.project-list tr th:last-child {
+    text-align: center;
+}
+.project-list>thead>tr>th {
+    background-color: #ddd;
+}
+.project-list > thead > tr > th {
+    border-bottom: 5px solid #CCC;
+}
+.project-list tbody>tr {
+    background-color: #e6e6e6;
+}
+.project-list>thead>tr>th, 
+.project-list>tbody>tr>th, 
+.project-list>tfoot>tr>th, 
+.project-list>thead>tr>td, 
+.project-list>tbody>tr>td, 
+.project-list>tfoot>tr>td {
+    border-top: 1px solid #FFFFFF;
+}
+.project-list a {
+    color: #333;
+}
+
+/* Custom Icons */
+.taskicon {
+  background-image: url('../img/taskicons.png');
+  background-repeat: no-repeat;
+  display: inline-block;
+  position: relative;
+  margin: 1px;  
+  height: 1em;
+  width: 1em;
+  top: 3px;
+  margin: 1px;
+  padding: 2px;
+  box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  cursor: pointer;
+}
+.taskicon-plus,
+.taskicon-minus {
+  top: 4px;
+  padding: 0px;
+}
+.taskicon-info {
+  background-position: 0 0;
+}
+.taskicon-circle-arrow-down {
+  background-position: -20px 0;
+}
+.taskicon-circle-arrow-right {
+  background-position: -40px 0;
+}
+.taskicon-share {
+  background-position: -60px 0;
+}
+.taskicon-remove {
+  background-position: -80px 0;
+}
+.taskicon-plus {  
+  background-position: -100px 0;
+}
+.taskicon-minus {
+  background-position: -120px 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/*project assets (Otto)*/
+
+
+
+.icon-cont:after {
+  content: "";
+  text-align: right;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 70%;
+  height: 1.2em;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
+}
+
+
+
+.icon-cont {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /*overflow: hidden !important;*/
+  
+}
+.task-title {
+  width: 100%;
+  height: 100%;
+  overflow: hidden !important;
+}
+
+.schemeBox .glyphicon {
+  position: absolute;
+}
+
+.icon-cont .glyphicon-circle-arrow-left {
+  left: -14px;
+  top: 11px;
+}
+
+.icon-cont .glyphicon-circle-arrow-right {
+  right: -14px;
+  top: 11px;
+
+}
+
+.icon-cont .glyphicon-circle-arrow-up {
+  right: 49px;
+  top: -15px;
+}
+
+.icon-cont .glyphicon-circle-arrow-down {
+  right: 49px;
+  top: 39px;
+}
+
+#d_icon_box {
+  position: absolute;
+  top: -45px !important;
+  left: -10px !important;
+}
+
+/* Bootstrap Tour */
+.tour-step-task {
+  margin-left: -40%;
+}
+
+.raci-view {
+  position: relative;
+}
+.raci-view .raci-note  {
+  position: absolute;
+  left: 210px;
+  top: 62px;
+  width: 81%;
+}
+
+.form-inline .form-group {
+  margin-left: 0px;
+  margin-right: 2px;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

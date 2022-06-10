@@ -1,0 +1,40 @@
+div.text-center 
+  div(id="logo")
+  h1(id="form-title") Get Started with a Free Account
+  p Sign Up in less than 30 seconds. No credit card required.
+
+div(class="form-center")
+  form(class="user-form form-horizontal padder", role="form", name="userForm")
+    div(class="form-group", ng-show="message")
+      div(class="alert alert-{{ message.type }}") {{ message.text }}   <br/>
+    
+    div(class="form-group", ng-show="errors")
+      div(class="alert alert-danger") 
+        ul(ng-repeat="error in errors")
+          li {{ error.type || error }}
+      br
+
+    div.form-group
+      label(for="inputUsername", class="control-label") Username
+      div
+        input(type="text", required, ng-model="user.username",   class="form-control", id="inputUsername", placeholder="Choose a Username")
+    div.form-group
+      label(for="inputEmail", class="control-label") Email
+      div
+        input(type="email", required, ng-model="user.email",   class="form-control", id="inputEmail", placeholder="Email Address")
+      p.sub-label What's your e-mail address?
+    div.form-group
+      label(for="inputPassword", class="control-label") Password
+      div
+        input(type="password", required, ng-model="user.password", class="form-control", id="inputPassword", placeholder="Password")
+    div.form-group
+      label(for="inputPasswordVerify", class="control-label") Confirm Password
+      div
+        input(type="password", ng-model="user.password_verify", class="form-control", id="inputPasswordVerify", placeholder="Password Confirmation", equals="{{ user.password }}")
+    div.form-group.signup-buttons
+      div
+        button(type="submit", class="btn btn-info", ng-click="signup(user, userForm)", ng-disabled="userForm.$invalid") Sign Up
+        a(href="/#/signin", class="btn btn-default pull-right") Already Have An Account
+    div.form-group
+      div
+        a(href="/auth/google", id="connect-google") Sign In With Google

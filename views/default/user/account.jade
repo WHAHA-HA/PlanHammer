@@ -1,0 +1,128 @@
+div.container
+  div.row
+    div.col-md-12
+      h2 Account Information
+      div(class="form-horizontal padder")
+        div(class="form-group", ng-show="message")
+          div(class="alert alert-{{ message.type }} col-lg-5") {{ message.text }}
+        tabset
+          tab(heading="Profile", active="tab.profile")
+            br
+            div(class="well well-lg") Profile Information
+            br
+
+            div.form-group(ng-show="errors")
+              div(class="alert alert-danger") 
+                ul(ng-repeat="error in errors")
+                  li {{ error.type || error }}
+            br
+            form(role="form")
+              .form-group.image-uploader-form
+                input(type="file", id="inputImage", name="image")
+                img.user-picture(ng-src="/api/user/{{ user._id }}/image", ng-if="user.has_image")
+                img.user-picture(ng-src="/img/no-image.png", ng-if="!user.has_image")
+                button.btn.btn-success.upload(type="submit", onclick="angular.element(this).scope().upload()") Upload Profile Picture
+
+                  //-========= account form
+            form(class="sm-centered-form form-horizontal padder", role="form", name="userForm")
+              div.form-group
+                label(for="inputUsername", class="col-lg-5 col-md-5 control-label") Username
+                div.col-lg-3.col-md-3
+                  p.form-control-static {{ user.username }}
+              div.form-group
+                label(for="inputPassword", class="col-lg-5 col-md-5 control-label") Password
+                div.col-lg-3.col-md-3
+                  input(type="password", ng-model="user.password", class="form-control", id="inputPassword", placeholder="New Password")
+              div.form-group
+                label(for="inputPasswordVerify", class="col-lg-5 col-md-5 control-label") Confirm New Password
+                div.col-lg-3.col-md-3
+                  input(type="password", ng-model="user.password_verify", class="form-control", id="inputPasswordVerify", placeholder="New Password", equals="{{ user.password }}")
+              div.form-group
+                label(for="inputFirstName", class="col-lg-5 col-md-5 control-label") First Name
+                div.col-lg-3.col-md-3
+                  input(type="text", required, ng-model="user.name.first", class="form-control", id="inputFirstName")
+              div.form-group
+                label(for="inputLastName", class="col-lg-5 col-md-5 control-label") Last Name
+                div.col-lg-3.col-md-3
+                  input(type="text", required, ng-model="user.name.last", class="form-control", id="inputLastName")
+              div.form-group
+                label(for="inputEmail", class="col-lg-5 col-md-5 control-label") Email
+                div.col-lg-3.col-md-3
+                  input(type="text", required, ng-model="user.email", class="form-control", id="inputEmail")
+              div.form-group
+                label(for="inputAddress", class="col-lg-5 col-md-5 control-label") Street Address
+                div.col-lg-3.col-md-3
+                  input(type="text", ng-model="user.address", class="form-control", id="inputAddress")
+              div.form-group
+                label(for="inputCity", class="col-lg-5 col-md-5 control-label") City
+                div.col-lg-3.col-md-3
+                  input(type="text", ng-model="user.city", class="form-control", id="inputCity")
+              div.form-group
+                label(for="inputState", class="col-lg-5 col-md-5 control-label") State
+                div.col-lg-3.col-md-3
+                  input(type="text", ng-model="user.state", class="form-control", id="inputState")
+              div.form-group
+                label(for="inputZip", class="col-lg-5 col-md-5 control-label") Zip Code
+                div.col-lg-3.col-md-3
+                  input(type="text", ng-model="user.zip", class="form-control", id="inputZip")
+              div.form-group
+                label(for="inputCountry", class="col-lg-5 col-md-5 control-label") Country
+                div.col-lg-3.col-md-3
+                  input(type="text", ng-model="user.country", class="form-control", id="inputCountry")
+              div.form-group
+                div(class="col-lg-8 col-md-8")
+                  button(type="submit", class="btn btn-info pull-right", ng-click="update(user, userForm)", ng-disabled="userForm.$invalid") Update
+
+          tab(heading="Payments", active="tab.payments")
+            br
+            div(class="well well-lg") Plan and Payment Settings
+            div.col-lg-6.col-md-6.col-sm-6.col-xs-6.col-offset-lg-3.col-md-offset-3.col-sm-offset-3.col-xs-offset-3(ng-controller="UserCardController")
+              div.width350
+                div.form-group
+                  br
+                  br
+                  div(class="alert alert-danger", ng-show="!currentPlan") Exporting requires a paid account. 20 a month for 1-3 collaborators. Enter your credit card details to start your subscription.
+                  label Current Plan
+
+                  div(ng-show="currentPlan") {{ currentPlan }}
+                  div(ng-show="!currentPlan") Free Trial
+
+                  br
+                  label Credit Card
+                  div
+                    div(class="form-group", ng-show="error")
+                      div(class="alert alert-danger") {{ error }} <br/>
+
+                    form#card-form.form-horizontal(role="form", name="cardForm")
+                      .form-group
+                        .col-md-12.col-sm-12.col-xs-12
+                          .card-wrapper
+                      .form-group
+                        .col-md-12.col-sm-12.col-xs-12
+                          input(type="text", required, ng-model="card.number", class="form-control card-number", id="cardNumber", placeholder="Enter your card number.", autocomplete="off")
+                      .form-group
+                        .col-md-12.col-sm-12.col-xs-12
+                          input(type="text", ng-model="card.name_on_card", class="form-control name-on-card", id="nameOnCard", placeholder="Enter name on card.", autocomplete="off")
+                      .form-group
+                        .cardinfo.col-lg-12.col-md-12.col-sm-12.col-xs-12
+                          div.left
+                            label CVC:
+                            input(type="text", required, ng-model="card.cvc", class="form-control name-on-card", id="cvc", placeholder="", autocomplete="off")
+                          div.right
+                            label Exp. Date:
+                            input(type="text", required, ng-model="card.expdate", class="form-control card-expiry-year", id="expdate", placeholder="mm/yyyy", autocomplete="off")
+                      .form-group
+                        .col-lg-12.col-md-12.col-sm-12.col-xs-12
+                          button(type="button", class="btn btn-default btn-info btn-wide", ng-click="updateCard(card, cardForm)", ng-disabled="cardForm.$invalid") Update Card
+                  a.form-link(ng-click="deactivateAccount()") Deactivate Account
+          tab(heading="Collaborators", active="tab.collaborators")
+            br
+            div(ng-controller="CollaboratorsCtrl")
+              div(ng-if="!collaborators || collaborators.length===0", class="well well-lg") Nothing to see here. Invite Collaborators to breakdown tasks in the "Projects" tab.
+              ul
+                li(ng-repeat="col in collaborators")
+                  span {{ (col.name.first + ' ' + col.name.last).trim() || col.username }}
+                  a(ng-click="view($index)", style="margin-left: 10px;") View
+                  a(ng-click="delete($index)", style="margin-left: 10px;") Delete
+      div(ng-include="'views/user/assigned_modal'")
+

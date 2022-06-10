@@ -1,0 +1,7 @@
+xhtml
+  head
+    meta(charset='utf8')
+    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+  body
+    h1 Hello
+    p #{user.name.first} #{user.name.last} has assigned you a new task in the Planhammer project #{project.name} please click <a href="http://#{domain}/#/#{is_registered ? 'signin':'signup'}">here</a> to log in and view your assignment.

@@ -1,0 +1,9 @@
+div.row
+  div.col-md-12
+    div(ui-view="nodeForm")
+
+    form(class="form-horizontal padder", role="form", name="userForm")
+      div(class="form-group", ng-show="message")
+        div(class="alert alert-{{ message.type }} col-lg-5") {{ message.text }} <br/>
+    div.ohoo
+      div#body(class="draw-area-container", ng-controller="schemeController")

@@ -1,0 +1,48 @@
+script(type="text/ng-template", id="inviteModal.html")
+  div(class="modal-header")
+    button(type="button", class="close", ng-click="cancel()") &times;
+    h4(class="modal-title") Invite Collaborator
+  div(class="modal-body invite")
+    div(class="alert alert-{{ message.type }}", ng-show="message") {{ message.text }} <br/>
+    div(class="alert alert-danger", ng-show="errors")
+      ul(ng-repeat="error in errors")
+        li {{ error.type }}
+    div(class="fields-check")
+      form(class="padder", role="form", name="projectUserForm")
+        div(class="form-group input-email")
+          input(type="text", id="inputEmail", class="form-control input-lg", required, ng-model="invited_user.email", autocomplete="off", typeahead="user.email for user in usersByEmail($viewValue)", typeahead-editable="true", placeholder="Please enter email",  typeahead-min-length='3')
+        div(class="form-group input-email")
+          .checkbox
+            label
+              input(type="checkbox", ng-model="invited_user.assign")
+              |  Assign This Task
+        div(class="form-group input-email")
+          .checkbox
+            label
+              input(type="checkbox", ng-model="invited_user.project")
+              |  Grant access to entire project
+        div(class="form-group input-email")
+          .checkbox
+            label
+              input(type="checkbox", ng-model="invited_user.subtasks")
+              |  Allow access to this tasks and it's sub-tasks only
+        div(class="form-group")
+          button(type="submit", class="btn btn-default btn-lg", ng-click="submit(invited_user, projectUserForm)", ng-disabled="projectUserForm.$invalid") Invite
+    div
+      h4(class="lead text-center") Existing Collaborators
+      ul
+        li(ng-repeat="shared in node._shared")
+          b {{ shared.user.email }}
+          | - {{ shared.user.name.first }} {{ shared.user.name.last }} ({{ shared.user.username }}) &nbsp;
+          span(class="taskicon taskicon-remove", ng-click="reject(shared.user, $index)", ng-show="!shared.user.$rejecting") &nbsp;
+          span(class="glyphicon glyphicon-refresh", ng-show="shared.user.$rejecting")
+    hr(ng-show="waiting_assignments.length")
+    div(ng-show="waiting_assignments.length")
+      p(class="lead text-center") Waiting for registration
+      ul
+        li(ng-repeat="assignment in waiting_assignments")
+          b {{ assignment.email }} &nbsp;
+          span(class="taskicon taskicon-remove", ng-click="reject(assignment, $index, true)", ng-show="!assignment.$rejecting") &nbsp;
+          span(class="glyphicon glyphicon-refresh", ng-show="assignment.$rejecting")
+  div(class="modal-footer")
+

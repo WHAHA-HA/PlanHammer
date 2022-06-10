@@ -1,0 +1,43 @@
+div.container
+  div.row
+    div.col-md-12
+      div(ui-view="nodeForm")
+      div
+        div(ng-show="raciList.task_count <= 0", class="well well-lg") In order to assign responsibilities, please create some tasks first.
+        div.raci-view(ng-hide="raciList.task_count <= 0")
+          div(ng-show="raciList.resources <= 0", class="well well-lg raci-note") Create a new resource by clicking "New Resource" on the top left of the screen.
+          div.new-resource
+            span.text.green(ng-hide="_raci.showInput", ng-click="showRaciInput()") New Resource... +
+            span.plus.green(ng-hide="_raci.showInput", ng-click="showRaciInput()")
+            input.add.form-control(
+              ng-show="_raci.showInput"
+              ng-model="resourceName"
+              focus-me="_raci.showRaciInput"
+              ng-enter="doneEditing(); addPerson(resourceName); resourceName=''; _raci.showInput=false; _raci.showRaciInput=false;"
+              ng-esc="cancelRaciAdd()"
+              focus-out="cancelRaciAdd()")
+            button.btn.btn-primary(ng-show="_raci.showInput", ng-click="addPerson(resourceName); resourceName=''; _raci.showInput=false; _raci.showRaciInput=false") Add
+          div.contacts.table.table-hover(style="{{ 'width:' + raciWidth + 'px;'}}")
+            div.thead(style="{{ 'width:' + raciWidth + 'px;'}}")
+              div.tr
+                div.th Task
+                div.th(ng-repeat="resource in raciList.resources")
+                  {{ resource | cut:true:17:' ...' }}
+                  &nbsp
+                  &nbsp
+                  span.label.label-danger(id="delete-raci", ng-click="deleteResource(currentNode, resource)", ng-hide="userResource == resource") X
+                div.clearfix
+            div.tbody(style="{{ 'width:' + raciWidth + 'px;'}}")
+              div(class="tr", ng-repeat="task in raciList.tasks")
+                div.td {{ task.title | cut:true:24:' ...' }}
+                div.td(ng-repeat="resource in raciList.resources")
+                  div(ng-init="new_role=findRaci(resource, task).role;")
+                    div.btn-group( dropdown, is-open="status.isopen" )
+                      button( type="button", ng-click="stashButton($event )", class="btn btn-primary dropdown-toggle raciButton {{new_role}}", dropdown-toggle){{new_role.substring(0,1).toUpperCase()+new_role.substring(1) || 'Unassigned'}}
+                        span( class="caret" )
+                      ul( class="dropdown-menu", role="menu", id="raciRole" )
+                        li(ng-click="setRaciRole('Responsible', 'rgb(227, 70, 29)'); updateRaciRole(findRaci(resource, task), task, resource, 'responsible')") Responsible
+                        li(ng-click="setRaciRole('Accountable', 'rgb(255, 161, 0)'); updateRaciRole(findRaci(resource, task), task, resource, 'accountable')") Accountable
+                        li(ng-click="setRaciRole('Consulted', '#428bca'); updateRaciRole(findRaci(resource, task), task, resource, 'consulted')") Consulted
+                        li(ng-click="setRaciRole('Informed', 'rgb(156, 164, 156)'); updateRaciRole(findRaci(resource, task), task, resource, 'informed')") Informed
+                div.clearfix

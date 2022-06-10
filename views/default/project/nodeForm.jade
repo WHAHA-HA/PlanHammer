@@ -1,0 +1,365 @@
+div(ng-cloak, class="col-lg-5 sidebar ng-cloak", ng-show="currentNode.showForm", click-outside="closeSidebar()")
+  button(class="close", ng-click="closeSidebar()", type="button") ×
+
+  span(class="glyphicon glyphicon-arrow-right pull-right near-node", ng-show="existsNext(currentNode)", ng-click="nextNode(currentNode)")
+  span(class="glyphicon glyphicon-arrow-left pull-right near-node", ng-show="existsPrevious(currentNode)", ng-click="previousNode(currentNode)")
+
+  tabset(justified="true")
+    
+    tab(heading="Task Attributes")
+      br
+      form(class="form-horizontal padder", role="form", name="currentNodeForm")
+        div(class="form-group", ng-show="message")
+          div(class="alert alert-{{ message.type }} col-lg-9") {{ message.text }} <br/>
+        div.form-group
+          label(for="inputTitle", class="col-lg-3 control-label") Title
+          div.col-lg-9
+            input(type="text", required, ng-model="currentNode.title", class="form-control", id="inputTitle", ng-change="update(currentNode, currentNodeForm)")
+        div.form-group
+          label(for="inputAssigned", class="col-lg-3 control-label") Assigned to
+          div.col-lg-7
+            input(type="text", id="inputAssigned", class="form-control", ng-model="currentNode.selectedUser", autocomplete="off", typeahead="user.email for user in searchUser($viewValue)", typeahead-editable="true", placeholder="Enter username or email",  typeahead-min-length='2')
+          div.col-xs-1
+            button(class="btn btn-default", ng-click="assignToUser(currentNode); currentNode.selectedUser='';") Assign
+
+          div.col-lg-7.col-lg-offset-3.assigned-users
+            ul
+              li(ng-repeat="user in currentNode.assignedUsers")
+                | {{ user.email }} &nbsp;
+                span(class="glyphicon glyphicon-remove-sign", ng-click="rejectUser(currentNode, user.email)")
+        div.form-group
+          label(for="lbltimezone", class="col-lg-3 control-label") Timezone
+          div(class="form-inline col-lg-9")
+            label(id="lbltimezone", class="control-label") {{ Time.find_timezone(project.timezone).str || 'Not set'}}
+        div.form-group
+          label(for="inputStartDate", class="col-lg-3 control-label") Start Date
+          div.col-lg-9.datepick
+            div.form-horizontal
+              p.input-group
+                input(id="inputStartDate", type="text", class="form-control date-picker", datepicker-popup="dd-MMMM-yyyy", show-weeks="false", ng-model="currentNode.start_date", is-open="startDateStatus.opened", min-date="minDate", datepicker-options="dateOptions", style="padding: 10px;", ng-change="update(currentNode, currentNodeForm)", close-text="Close")
+                span.input-group-btn
+                  button(type="button", class="btn btn-default", ng-click="openStartDate($event)")
+                    i(class="glyphicon glyphicon-calendar")
+        div.form-group.datepick
+          label(for="inputEndDate", class="col-lg-3 control-label date-picker") End Date
+          div.col-lg-9
+            div.form-horizontal
+              p.input-group
+                input(id="inputEndDate", type="text", class="form-control date-picker", datepicker-popup="dd-MMMM-yyyy", show-weeks="false",  ng-model="currentNode.end_date", is-open="endDateStatus.opened", min-date="minDate", datepicker-options="dateOptions", ng-change="update(currentNode, currentNodeForm)", close-text="Close")
+                span.input-group-btn
+                  button(type="button", class="btn btn-default", ng-click="openEndDate($event)")
+                    i(class="glyphicon glyphicon-calendar")
+        div.form-group
+          label(for="inputComplete", class="col-lg-3 control-label") Complete
+          div.col-lg-9
+            div(class="progress progress-striped", my-progress="currentNode.complete")
+            div(ng-hide="project.settings.use_quality",range-slider, class="range-slider", min="0", max="100", startlow="0", starthigh="100", step="5", ng-model="currentNode.complete", ng-change="update(currentNode, currentNodeForm)")
+        
+        
+        div.form-group
+          label(for="inputDuration", class="col-lg-3 control-label") Duration
+          div(class="form-inline col-lg-9")
+            div(class="form-group duration-value")
+              input(type="number", id="inputDuration", class="form-control", ng-model="currentNode.duration.value", autocomplete="off", placeholder="Number here", ng-change="")
+            div(class="form-group")
+              select(id="durationType", class="form-control", ng-model="currentNode.duration.type", ng-options="t for t in ['minutes', 'hours', 'days', 'weeks', 'months']", ng-change="update(currentNode, currentNodeForm)")
+        div.form-group
+          label(for="lblSumofDuration", class="col-lg-3 control-label") Sum of Duration
+          div(class="form-inline col-lg-9")
+            label(id="lblSumofDuration", class="control-label") {{currentNode.sumofDuration.value}} {{currentNode.sumofDuration.type}}
+        div.form-group
+          label(for="sumOfChildrenDuration", class="col-lg-3 control-label") Sum of Subtasks Duration
+          div(class="form-inline col-lg-9")
+            label(id="sumOfChildrenDuration", class="control-label") {{ sumOfChildrenDuration(currentNode) }} Hours
+
+        div.form-group
+          label(for="inputOptimisticTime", class="col-lg-3 control-label") Optimistic Time
+          div(class="form-inline col-lg-9")
+            div(class="form-group optimistic-time-value")
+              input(type="number", id="inputOptimisticTime", class="form-control", ng-model="currentNode.optimisticTime.value", autocomplete="off", placeholder="Number here", ng-change="update(currentNode, currentNodeForm)")
+            div(class="form-group")
+              select(id="optimisticTimeType", class="form-control", ng-model="currentNode.optimisticTime.type", ng-options="t for t in ['minutes', 'hours', 'days', 'weeks', 'months']", ng-change="update(currentNode, currentNodeForm)")
+        div.form-group
+          label(for="inputPessimisticTime", class="col-lg-3 control-label") Pessimistic Time
+          div(class="form-inline col-lg-9")
+            div(class="form-group pessimistic-time-value")
+              input(type="number", id="inputPessimisticTime", class="form-control", ng-model="currentNode.pessimisticTime.value", autocomplete="off", placeholder="Number here", ng-change="update(currentNode, currentNodeForm)")
+            div(class="form-group")
+              select(id="pessimisticTimeType", class="form-control", ng-model="currentNode.pessimisticTime.type", ng-options="t for t in ['minutes', 'hours', 'days', 'weeks', 'months']", ng-change="update(currentNode, currentNodeForm)")
+        div.form-group
+          label(for="inputMostLikelyTime", class="col-lg-3 control-label") Most Likely Time
+          div(class="form-inline col-lg-9")
+            div(class="form-group most-likely-time-value")
+              input(type="number", id="inputMostLikelyTime", class="form-control", ng-model="currentNode.mostLikelyTime.value", autocomplete="off", placeholder="Number here", ng-change="update(currentNode, currentNodeForm)")
+            div(class="form-group")
+              select(id="mostLikelyTimeType", class="form-control", ng-model="currentNode.mostLikelyTime.type", ng-options="t for t in ['minutes', 'hours', 'days', 'weeks', 'months']", ng-change="update(currentNode, currentNodeForm)")
+        div.form-group
+          label(for="lblExpectedTime", class="col-lg-3 control-label") Expected Time
+          div(class="form-inline col-lg-9")
+            label(id="lblExpectedTime", class="control-label") {{currentNode.expectedTime.value}} {{currentNode.expectedTime.type}}
+        div.form-group
+          label(for="lblSumofExpectedTime", class="col-lg-3 control-label") Sum of Expected Time
+          div(class="form-inline col-lg-9")
+            label(id="lblSumofExpectedTime", class="control-label") {{currentNode.sumofExpectedTime.value}} {{currentNode.sumofExpectedTime.type}}
+
+        div.form-group
+          label(for="inputCost", class="col-lg-3 control-label") Cost
+          div.col-lg-9
+            input(type="number", ng-model="currentNode.cost", class="form-control", id="inputCost", ng-change="update(currentNode, currentNodeForm)")
+        div.form-group
+          label(for="lblSumofCost", class="col-lg-3 control-label") Sum of Cost
+          div(class="form-inline col-lg-9")
+            label(id="lblSumofCost", class="control-label") {{currentNode.sumofCost.value}} {{currentNode.sumofCost.type}}
+        div.form-group
+          label(for="sumOfChildrenCost", class="col-lg-3 control-label") Total Cost of Subtasks
+          div(class="form-inline col-lg-9")
+            label(id="sumOfChildrenCost", class="control-label") {{ sumOfSubtaskCosts(currentNode) }}
+
+        div.form-group
+          label(for="inputResource", class="col-lg-3 control-label") Resources
+          div.col-lg-9
+            div.row.col-lg-9
+              input(type="text", id="inputResource", class="form-control", ng-model="currentNode.$resource", autocomplete="off", ng-enterup="addResource(currentNode)")
+            div.row.col-lg-9
+              ul
+                li(ng-repeat="resource in currentNode.resources")
+                  | {{ resource.resource }} &nbsp;
+                  span(class="glyphicon glyphicon-remove-sign", ng-click="deleteRaci(currentNode, resource)")
+
+        div.form-group
+          label(for="inputDependencies", class="col-lg-3 control-label") Dependencies
+          div.col-lg-9
+
+            div(class="form-inline")
+              div(class="form-group")
+                input(type="text", id="inputDependencies", class="form-control", ng-model="currentNode.$dependency.title", autocomplete="off", typeahead="dep.title for dep in nodesByTitle($viewValue)", typeahead-editable="false", placeholder="Task title",  typeahead-min-length='3', typeahead-on-select="onSelectDependency($item, currentNode)")
+              div(class="form-group dependency-type dependency-type")
+                select(id="dependencyType", class="form-control", ng-model="currentNode.$dependency.type")
+                  option(value="FS") FS
+                  option(value="FF") FF
+                  option(value="SS") SS
+                  option(value="SF") SF
+              div.form-group
+                button(class="btn btn-default dependency-button", ng-disabled="!currentNode.$dependency._id || !currentNode.$dependency.type", ng-click="addDependency(currentNode)") Add
+
+            div.row.col-lg-9
+              ul
+                li(ng-repeat="dependency in currentNode._dependency")
+                  | {{ dependency.node.title }} - {{ dependency.type }} &nbsp;
+                  span(class="glyphicon glyphicon-remove-sign", ng-click="deleteDependency(currentNode, dependency)")
+        
+        div.form-group
+          label(for="inputNotes", class="col-lg-3 control-label") Notes
+          div.col-lg-9
+            textarea(ng-model="currentNode.notes", rows="4", class="form-control", id="inputNotes", ng-change="update(currentNode, currentNodeForm)")
+
+        div.form-group
+          div(class="col-lg-12")
+            button(class="btn btn-danger pull-right", ng-click="closeSidebar()") Close
+    
+    tab(heading="Risks")
+      br
+      form(class="form-horizontal padder", role="form", name="riskForm")
+        div(class="form-group", ng-show="message")
+          div(class="alert alert-{{ message.type }} col-lg-9") {{ message.text }} <br/>
+        div.form-group
+          label(for="riskName", class="col-lg-3 control-label") Name
+          div.col-lg-9
+            input(type="text", required, ng-model="currentNode.$risk.name", class="form-control", id="riskName")
+        div.form-group
+          label(for="riskTopic", class="col-lg-3 control-label") Topic
+          div.col-lg-9
+            input(type="text", required, ng-model="currentNode.$risk.topic", class="form-control", id="riskTopic")
+        div.form-group
+          label(for="riskLevel", class="col-lg-3 control-label") Level
+          div.col-lg-9
+            input(type="number", required, min="1", max="9", ng-model="currentNode.$risk.level", class="form-control", id="riskLevel")
+        div.form-group
+          label(for="riskProbability", class="col-lg-3 control-label") Probability
+          div.col-lg-9
+            div(class="progress progress-striped", my-progress="currentNode.$risk.probability || 0")
+            div(range-slider, class="range-slider", min="0", max="100", startlow="0", starthigh="100", step="5", ng-model="currentNode.$risk.probability")
+        div.form-group
+          label(for="riskImpact", class="col-lg-3 control-label") Impact
+          div.col-lg-9
+            label(id="riskImpactLabel", class="control-label") {{ currentNode.$risk.impact || 0}}
+            div(range-slider, class="range-slider", min="0", max="100", startlow="0", starthigh="100", step="1", ng-model="currentNode.$risk.impact")
+        div.form-group
+          label(for="riskScore", class="col-lg-3 control-label") Risk Score
+          div(class="form-inline col-lg-9")
+            label(id="riskScore", class="control-label") {{ (currentNode.$risk.probability * currentNode.$risk.impact) || 0 }}
+        div.form-group
+          label(for="riksMitigation", class="col-lg-3 control-label") Mitigation
+          div.col-lg-9
+            textarea(ng-model="currentNode.$risk.mitigation", rows="3", class="form-control", id="riksMitigation")
+        div.form-group
+          label(for="riksContingency", class="col-lg-3 control-label") Contingency
+          div.col-lg-9
+            textarea(ng-model="currentNode.$risk.contingency", rows="3", class="form-control", id="riksContingency")
+        div.form-group
+          label(for="riksConsequence", class="col-lg-3 control-label") Consequence          
+          div.col-lg-9
+            textarea(ng-model="currentNode.$risk.consequence", rows="3", class="form-control", id="riksConsequence")
+        div.form-group
+          div.col-lg-9
+            button.btn.btn-success(ng-click="addRisk(currentNode, riskForm)") Save
+      
+      br
+      br
+      div.col-lg-9
+        ul
+          li(ng-repeat="risk in currentNode.risks")
+            span Name: {{ risk.name }} , 
+            span Topic: {{ risk.topic }} , 
+            span Level: {{ risk.level }} , 
+            span Probability: {{ risk.probability }} , 
+            span Impact: {{ risk.impact }} , 
+            span Score: {{ risk.probability * risk.impact }} , 
+            span Mitigation: {{ risk.mitigation }} , 
+            span Contingency: {{ risk.contingency }}, 
+            span Consequence: {{ risk.consequence }}
+            span(class="glyphicon glyphicon-remove-sign", ng-click="deleteRisk(currentNode, risk)")
+    
+    tab(heading="RACI")
+      br
+      form.raci-form(class="form-horizontal padder", role="form", name="raciForm")
+        div.form-group(ng-show="message")
+          div(class="alert alert-{{ message.type }} col-lg-9") {{ message.text }} <br/>
+        div.form-group
+          div.col-lg-9
+            div(class="form-inline")
+              div(class="form-group")
+                input(type="text", id="inputRaci", class="form-control", ng-model="currentNode.$raci.resource", autocomplete="off", placeholder="Person")
+              div(class="form-group raci-role")
+                select(id="raciRole", class="form-control", ng-model="currentNode.$raci.role")
+                  option(value="responsible") Responsible
+                  option(value="accountable") Accountable
+                  option(value="consulted") Consulted
+                  option(value="informed") Informed
+              div.form-group
+                button(class="btn btn-default raci-button", ng-disabled="!currentNode.$raci.resource || !currentNode.$raci.role", ng-click="addRaci(currentNode)") Add
+
+            div.row.col-lg-11
+              ul.raci-list
+                li(ng-repeat="raci in currentNode.racis")
+                  div(ng-if="raci.resource && raci.role")
+                    span {{ raci.resource }} - {{ raci.role }} &nbsp;
+                    span(class="glyphicon glyphicon-remove-sign", ng-click="deleteRaci(currentNode, raci)")
+    
+    tab(heading="Quality")
+      .quality
+        div(class="progress progress-striped", my-progress="qualityProgress(currentNode)", ng-show="currentNode._quality && currentNode._quality.length > 0")
+        ul.quality-list
+          li(ng-repeat="quality in currentNode._quality")
+            input(type="checkbox", ng-model="quality.completed", ng-change="updateQuality(currentNode, quality)")
+            span(ng-class="{ checked: quality.completed}")  {{ quality.text }}
+            span.remove(class="glyphicon glyphicon-remove-sign", ng-click="deleteQuality(currentNode, quality)")
+        .add-quality      
+          input(type="text", placeholder="Add an item...", ng-model="currentNode.$qualityText", class="form-control", ng-enterup="addQuality(currentNode)")
+    
+    tab(heading="Files")
+      .row.files
+        .file-list.col-lg-8
+          div(ng-show="currentNode._files <= 0").alert.alert-info Click a service to the right to add a file to this task.
+          ul
+            li.file(ng-repeat="file in currentNode._files")
+              img(src="/img/file-{{file.from}}.png")
+              .attributes
+                span.name {{ file.name }}
+                span.time(am-time-ago="file.added_at")
+                a.open(href="{{ file.link }}", target="_blank") Open In {{ file.from }}
+                a.delete(ng-click="deleteFile(file)") Delete
+              .clearfix
+                
+        .add-file.col-lg-4
+          button.btn.dropbox(ng-click="addFromDropbox()") Choose from Dropbox
+          button.btn.google Choose from Google
+    
+    tab(heading="Agile")
+      
+      //- br( ng-if="sortable.boards.length > 0" )
+      .row(style="margin-top: 20px;")
+        div.form-group(ng-show="message")
+          div(class="alert alert-{{ message.type }} col-lg-9") {{ message.text }}
+        .col-lg-12.create-new-board(id="sortable_board_title_form", ng-if="sortable_board_title_form")
+          span() New Board:  
+          input.editable.form-control.edit-in-place(type="text"
+            placeholder="enter board name"
+            id="nf_board_name"
+            ng-enter="sortable_create_board(board)"
+            focus-me="sortable_board_title_form" 
+            ng-esc="sortable_switch_board_form()"
+            focus-out="sortable_switch_board_form()"
+            ng-model="sort.sortable_new_board_name")
+         
+        .col-lg-12.agile-form-inputs(ng-if = "!sortable_board_title_form" )
+          .ph-select(ng-if = "!sortable_board_title_form" )
+            select.form-control.first(ng-model="sort.board", ng-options="board.name for board in boards", default-option="")
+              option(value="") Select Board
+            span(style="margin-left: 15px;") or
+            div(id="nf_create_board_butt",ng-if="!sortable_board_title_form",  ng-click="sortable_switch_board_form()") Create New
+        .col-lg-12.create-new-list(id="sort.sortable_list_title_form", ng-if="sort.sortable_list_title_form")
+          span() New list:
+          input.editable.form-control.edit-in-place(type="text"
+            placeholder="enter list name"
+            id="nf_list_name"
+            ng-enter="sortable_create_list(sort.board)"
+            focus-me="sort.sortable_list_title_form" 
+            ng-esc="sortable_switch_list_form()"
+            focus-out="sortable_switch_list_form()"
+            ng-model="sort.sortable_new_list_name")
+        
+        .col-lg-12.agile-form-inputs(ng-if="!sort.sortable_list_title_form")
+          .ph-select
+            select.form-control(ng-model="sort.list",  ng-options="list.name for list in sort.board.lists", ng-change="addTask(currentNode, sort.list)")
+              option(value="") Select List
+            span(style="margin-left: 15px;") or
+            span(id="nf_create_list_butt", ng-if="!sort.sortable_list_title_form",  ng-click="sortable_switch_list_form()") Create New
+            br
+            br
+            label.alert.alert-danger(ng-show="sort.error"){{sort.error}}
+    
+    tab(heading="Comments")
+      .row
+        div.form-group(ng-show="message")
+          div(class="alert alert-{{ message.type }} col-lg-9") {{ message.text }} <br/>
+        .col-lg-12
+          ul.comments(ng-if="comments")
+            div(ng-repeat="comment in comments | orderByVotes | orderBy:created_at:true")
+              div(ng-if="comment._id")
+                li.comment.panel
+                  .panel-heading.by-who
+                    span.pull-left
+                      b {{ comment.user.name.first + ' ' + comment.user.name.last}}
+                    div.noselect
+                      &nbsp;&nbsp;
+                      span.glyphicon.glyphicon-arrow-up(ng-click="upvote(comment)", ng-style="{color: comment.upvote ? '#D24D57': '#58666e'}")
+                      &nbsp;
+                      span {{ comment.upvotes.length }}
+                      &nbsp;
+                      span.glyphicon.glyphicon-edit(ng-click="comment.editing=!comment.editing")
+                      &nbsp;
+                      span.glyphicon.glyphicon-remove(ng-click="remove_comment(comment, comments)")
+                      span.pull-right(am-time-ago="comment.created_at")
+                  .panel-body.text
+                    span(ng-hide="comment.editing") {{ comment.text }}
+                    .edit-comment(ng-show="comment.editing")
+                      input(ng-model="comment.text")
+                      &nbsp;
+                      &nbsp;
+                      span.label.label-info(ng-click="edit_comment(comment)") Edit
+                    br
+                    span.label.label-success.reply(ng-click="show_reply(comment)") reply
+                    .add-comment.inside.panel.panel-default(ng-show="comment.show_reply")
+                      .enter-text
+                        textarea(ng-model="text", rows="3", placeholder="Your comment...")
+                      .panel-footer
+                        button.comment-btn.btn.btn-success.btn-sm.pull-right(ng-click="add_comment(text, currentNode, comment); text='';") Comment
+
+                ng-include(src ="'views/default/project/includes/comment'")
+                  
+          .add-comment.panel.panel-default
+            .enter-text
+              textarea(ng-model="text", rows="3", placeholder="Your comment...")
+            .panel-footer
+              button.comment-btn.btn.btn-success.btn-sm.pull-right(ng-click="add_comment(text, currentNode, null); text='';") Comment
